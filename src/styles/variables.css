@@ -1,0 +1,104 @@
+@theme {
+
+  /* Begin with a custom primary color */
+  --color-primary-400: #ff8f26; /* Lighter for hover */
+  --color-primary-500: #ff7e00; /* Base color */
+  --color-primary-700: #e67000; /* Darker for links */
+  --color-primary-900: #b35900; /* Darkest for header */
+  /* End  */
+
+  --color-background: #ffffff;
+  --color-body: #595959;
+  --color-brand: #2b38d1;
+  --color-brand-dark: #333333;
+  --color-brand-light: #ffffff;
+  --color-brand-muted: #555c62;
+  --color-brand-sale: #ff6128;
+  --color-brand-danger: #dc2626;
+  --color-label_in: #008a00;
+  --color-label_out: #ef262c;
+
+  --color-border-base: #ebebeb;
+  --color-border-one:#ccd3d9;
+  --color-border-two:#e1e8ed;
+  --color-border-backdrop:#d4d4d4;
+
+  --color-fill-base: #212529;
+  --color-fill-one: #232F3F;
+  --color-fill-two: #222b34;
+  --color-fill-tints: #074e47;
+  --color-fill-purple: #0065bd;
+  --color-fill-footer: #8f9599;
+  --color-fill-dropdown-hover: #f6f9fc;
+
+  --breakpoint-xs: 320px;
+  --breakpoint-3xl: 1780px;
+  --breakpoint-4xl: 1921px;
+
+  --text-10px: 10px;
+  --text-11px: 11px;
+  --text-13px: 13px;
+  --text-15px: 15px;
+
+  --drop-shadow-header: 0 2px 3px rgba(0, 0, 0, 0.08);
+  --drop-shadow-dropDown: 0px 10px 20px rgba(41, 50, 68, 0.15);
+  --drop-shadow-thumb: 0px 3px 20px rgba(0, 0, 0, 0.12);
+  --drop-shadow-subMenu: 1px 2px 3px rgba(0, 0, 0, 0.08);
+  --drop-shadow-cardhori: 0 0 20px #487bb726;
+  --drop-shadow-navigation: 0 0 5px rgba(79, 95, 120, 0.2);
+  --drop-shadow-mobileNavigation: 0 -2px 3px rgba(0, 0, 0, 0.2);
+  --drop-shadow-variant: 0 .4rem .4rem rgba(0, 0, 0, 0.15);
+
+  --cursor-close-icon: url(../assets/icons/cursor-close.svg);
+  --ease-in-expo: cubic-bezier(0,0,.44,1.18);
+
+  --animate-banner: banner 0.8s ease-in;
+  --animate-marquee: marquee linear infinite;
+
+  @keyframes banner {
+    100% {inset-inline-start: 125%;}
+  }
+  @keyframes marquee {
+    0% { transform: translateX(100%) }
+    100% { transform: translateX(-100%) }
+  }
+}
+
+@layer base {
+  .dark {
+    --color-background: #201f1f;
+    --color-body: #ccc;
+    --color-brand: #2b38d1;
+    --color-brand-dark: #eee;
+    --color-brand-light: #ffffff;
+    --color-brand-muted: #b1b1b1;
+    --color-brand-sale: #ff6128;
+    --color-brand-danger: #dc2626;
+
+    --color-black: #eee;
+    --color-white: #272727;
+    --color-gray-900: #f3f4f6;
+    --color-gray-800: #efefef;
+    --color-gray-700: #e5e5e5;
+    --color-gray-500: #7a7a7a;
+    --color-gray-300: #565656;
+    --color-gray-200: #343434;
+    --color-gray-100: #222222;
+    --color-gray-50: #111111;
+
+    --color-border-base: #404040;
+    --color-border-one:#444;
+    --color-border-two:#4b4b4b;
+
+    --color-fill-dropdown-hover: #37373b;
+    --color-slate-200:#353539;
+
+    --drop-shadow-header: 0 2px 3px rgba(255, 255, 255, 0.08);
+    --drop-shadow-dropDown: 0px 10px 20px rgba(88, 94, 105, 0.15);
+    --drop-shadow-subMenu: 1px 2px 3px rgba(255, 255, 255, 0.08);
+    --drop-shadow-navigation: 0 0 2px #282b3026;
+
+  }
+}
+
+

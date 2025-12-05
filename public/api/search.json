@@ -1,0 +1,868 @@
+[
+  {
+    "id": "search1",
+    "name": "[Sample] Able Brewing System consetetur",
+    "slug": "sample-able-brewing-system-consetetur",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-1.jpg",
+      "original": "/assets/images/products/p-1.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 70,
+    "price": 1200,
+    "sale_price": 2000,
+    "unit": "Common Good",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ]
+  },
+  {
+    "id": "search2",
+    "name": "[Sample] Tiered Wire Basket  consetetur sadipscing elitr",
+    "slug": "sample-tiered-wire-basket-consetetur-sadipscing-elitr",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-2.jpg",
+      "original": "/assets/images/products/p-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 70,
+    "price": 550.74,
+    "sale_price": 550.74,
+    "unit": "Common Good",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ]
+  },
+  {
+    "id": "search3",
+    "name": "Sample Fog Linen Chambray Towel - Beige Stripe",
+    "slug": "fog-linen-chambray-towel-beige-stripe",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-3.jpg",
+      "original": "/assets/images/products/p-3.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 70,
+    "price": null,
+    "sale_price": null,
+    "unit": "1 Bag",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ],
+    "product_type": "variable",
+    "max_price": 40,
+    "min_price": 25,
+    "variations": [
+      {
+        "id": 8,
+        "attribute_id": 3,
+        "value": "12oz",
+        "attribute": {
+          "id": 3,
+          "slug": "available-in",
+          "name": "Available In",
+          "values": [
+            {
+              "id": 8,
+              "attribute_id": 3,
+              "value": "12oz"
+            },
+            {
+              "id": 9,
+              "attribute_id": 3,
+              "value": "24oz"
+            },
+            {
+              "id": 10,
+              "attribute_id": 3,
+              "value": "36oz"
+            }
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "attribute_id": 3,
+        "value": "24oz",
+        "attribute": {
+          "id": 3,
+          "slug": "available-in",
+          "name": "Available In",
+          "values": [
+            {
+              "id": 8,
+              "attribute_id": 3,
+              "value": "12oz"
+            },
+            {
+              "id": 9,
+              "attribute_id": 3,
+              "value": "24oz"
+            },
+            {
+              "id": 10,
+              "attribute_id": 3,
+              "value": "36oz"
+            }
+          ]
+        }
+      },
+      {
+        "id": 10,
+        "attribute_id": 3,
+        "value": "36oz",
+        "attribute": {
+          "id": 3,
+          "slug": "available-in",
+          "name": "Available In",
+          "values": [
+            {
+              "id": 8,
+              "attribute_id": 3,
+              "value": "12oz"
+            },
+            {
+              "id": 9,
+              "attribute_id": 3,
+              "value": "24oz"
+            },
+            {
+              "id": 10,
+              "attribute_id": 3,
+              "value": "36oz"
+            }
+          ]
+        }
+      }
+    ],
+    "variation_options": [
+      {
+        "id": 247,
+        "title": "12oz",
+        "price": 35,
+        "sale_price": null,
+        "quantity": "10",
+        "is_disable": 0,
+        "sku": "200101",
+        "options": [
+          {
+            "name": "Available In",
+            "value": "12oz"
+          }
+        ]
+      },
+      {
+        "id": 248,
+        "title": "24oz",
+        "price": 35,
+        "sale_price": 25,
+        "quantity": "35",
+        "is_disable": 0,
+        "sku": "200102",
+        "options": [
+          {
+            "name": "Available In",
+            "value": "24oz"
+          }
+        ]
+      },
+      {
+        "id": 249,
+        "title": "36oz",
+        "price": 40,
+        "sale_price": null,
+        "quantity": "25",
+        "is_disable": 0,
+        "sku": "200103",
+        "options": [
+          {
+            "name": "Available In",
+            "value": "36oz"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "search4",
+    "name": "Sample Chemex Coffeemaker 3 Cup  consetetur sadipscing",
+    "slug": "chemex-coffeemaker-3-cup-consetetur-sadipscing-elitr",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-4.jpg",
+      "original": "/assets/images/products/p-4.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 170,
+    "price": 560.50,
+    "sale_price": null,
+    "unit": "1 Bag",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ]
+  },
+  {
+    "id": "search5",
+    "name": "[Sample] Dustpan & Brush sed diam nonumy eirmod ",
+    "slug": "sample-dustpan-brush-sed-diam-nonumy-eirmod",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-5.jpg",
+      "original": "/assets/images/products/p-5.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 270,
+    "price": 3,
+    "sale_price": 2.6,
+    "unit": "1 each",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ]
+  },
+  {
+    "id": "search6",
+    "name": "[Sample] Canvas Laundry Cart sed diam nonumy eirmod ",
+    "slug": "sample-canvas-laundry-cart-sed-diam-nonumy-eirmod",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-6.jpg",
+      "original": "/assets/images/products/p-6.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 70,
+    "price": null,
+    "sale_price": null,
+    "unit": "1 each ",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ],
+    "product_type": "variable",
+    "max_price": 5,
+    "min_price": 3,
+    "variations": [
+      {
+        "id": 8,
+        "attribute_id": 3,
+        "value": "12oz",
+        "attribute": {
+          "id": 3,
+          "slug": "available-in",
+          "name": "Available In",
+          "values": [
+            {
+              "id": 8,
+              "attribute_id": 3,
+              "value": "12oz"
+            },
+            {
+              "id": 9,
+              "attribute_id": 3,
+              "value": "24oz"
+            },
+            {
+              "id": 10,
+              "attribute_id": 3,
+              "value": "36oz"
+            }
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "attribute_id": 3,
+        "value": "24oz",
+        "attribute": {
+          "id": 3,
+          "slug": "available-in",
+          "name": "Available In",
+          "values": [
+            {
+              "id": 8,
+              "attribute_id": 3,
+              "value": "12oz"
+            },
+            {
+              "id": 9,
+              "attribute_id": 3,
+              "value": "24oz"
+            },
+            {
+              "id": 10,
+              "attribute_id": 3,
+              "value": "36oz"
+            }
+          ]
+        }
+      },
+      {
+        "id": 10,
+        "attribute_id": 3,
+        "value": "36oz",
+        "attribute": {
+          "id": 3,
+          "slug": "available-in",
+          "name": "Available In",
+          "values": [
+            {
+              "id": 8,
+              "attribute_id": 3,
+              "value": "12oz"
+            },
+            {
+              "id": 9,
+              "attribute_id": 3,
+              "value": "24oz"
+            },
+            {
+              "id": 10,
+              "attribute_id": 3,
+              "value": "36oz"
+            }
+          ]
+        }
+      }
+    ],
+    "variation_options": [
+      {
+        "id": 247,
+        "title": "12oz",
+        "price": 2,
+        "sale_price": null,
+        "quantity": "10",
+        "is_disable": 0,
+        "sku": "200101",
+        "options": [
+          {
+            "name": "Available In",
+            "value": "12oz"
+          }
+        ]
+      },
+      {
+        "id": 248,
+        "title": "24oz",
+        "price": 4,
+        "sale_price": 3.5,
+        "quantity": "35",
+        "is_disable": 0,
+        "sku": "200102",
+        "options": [
+          {
+            "name": "Available In",
+            "value": "24oz"
+          }
+        ]
+      },
+      {
+        "id": 249,
+        "title": "36oz",
+        "price": 5,
+        "sale_price": null,
+        "quantity": "25",
+        "is_disable": 0,
+        "sku": "200103",
+        "options": [
+          {
+            "name": "Available In",
+            "value": "36oz"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "search7",
+    "name": "[Sample] Tiered Wire Basket  consetetur sadipscing elitr",
+    "slug": "sample-tiered-wire-basket-consetetur-sadipscing-elitr",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-7.jpg",
+      "original": "/assets/images/products/p-7.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 70,
+    "price": null,
+    "sale_price": null,
+    "unit": "1 each",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ],
+    "product_type": "variable",
+    "max_price": 8,
+    "min_price": 5
+
+  },
+  {
+    "id": "search8",
+    "name": "[Sample] Oak Cheese Grater  consetetur sadipscing elitr",
+    "slug": "sample-oak-cheese-grater-consetetur-sadipscing-elitr",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-8.jpg",
+      "original": "/assets/images/products/p-8.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 70,
+    "price": null,
+    "sale_price": null,
+    "unit": "1 Bag",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ],
+    "product_type": "variable",
+    "max_price": 40,
+    "min_price": 25
+
+  },
+  {
+    "id": "search9",
+    "name": "[Sample] 1 L Le Parfait Jar  consetetur sadipscing elitr",
+    "slug": "parfait-jar-consetetur-sadipscing-elitr",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-9.jpg",
+      "original": "/assets/images/products/p-9.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      },
+      {
+        "id": 4,
+        "thumbnail": "/assets/images/products/p-3-1.jpg",
+        "original": "/assets/images/products/p-3-1.jpg"
+      }
+    ],
+    "quantity": 70,
+    "price": null,
+    "sale_price": null,
+    "unit": "1 Bag",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ],
+    "product_type": "variable",
+    "max_price": 40,
+    "min_price": 25
+
+  },
+  {
+    "id": "search10",
+    "name": "Sample Coffeemaker 3 Cup  consetetur sadipscing",
+    "slug": "sample-coffeemaker-3-cup-consetetur-sadipscing-elitr",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis scelerisque nisl, a aliquet orci feugiat dapibus. Etiam at pulvinar neque",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-4.jpg",
+      "original": "/assets/images/products/p-4.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/p-4.jpg",
+        "original": "/assets/images/products/p-4.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/p-3-2.jpg",
+        "original": "/assets/images/products/p-3-2.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/p-3-3.jpg",
+        "original": "/assets/images/products/p-3-3.jpg"
+      }
+    ],
+    "isFeatured": true,
+    "rating": 4.5,
+    "discountPercentage": 2,
+    "quantity": 170,
+    "price": 1.50,
+    "sale_price": null,
+    "unit": "Common Good",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Digital",
+        "slug": "digital"
+      },
+      {
+        "id": 2,
+        "name": "Smartphones",
+        "slug": "smartphones"
+      },
+      {
+        "id": 3,
+        "name": "Tablets",
+        "slug": "tablets"
+      },
+      {
+        "id": 4,
+        "name": "Electronic",
+        "slug": "electronic"
+      }
+    ]
+  }
+]

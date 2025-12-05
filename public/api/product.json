@@ -1,0 +1,129 @@
+{
+  "id": "pb01",
+  "name": "Apple iPhone 16, 128GB, Ultramarine - Verizon",
+  "slug": "apple-iPhone-16-128GB-Ultramarine",
+  "description": "Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.",
+  "videoUrl": "https://www.youtube.com/shorts/6hPdSmd7sSc",
+  "image": {
+    "id": 1,
+    "thumbnail": "/assets/images/products/p-3.jpg",
+    "original": "/assets/images/products/p-3.jpg"
+  },
+  "gallery": [
+    {
+      "id": 1,
+      "thumbnail": "/assets/images/products/p-3.jpg",
+      "original": "/assets/images/products/p-3.jpg"
+    },
+    {
+      "id": 2,
+      "thumbnail": "/assets/images/products/p-3-1.jpg",
+      "original": "/assets/images/products/p-3-1.jpg"
+    },
+    {
+      "id": 3,
+      "thumbnail": "/assets/images/products/p-3-2.jpg",
+      "original": "/assets/images/products/p-3-2.jpg"
+    },
+    {
+      "id": 4,
+      "thumbnail": "/assets/images/products/p-3-3.jpg",
+      "original": "/assets/images/products/p-3-3.jpg"
+    },
+    {
+      "id": 5,
+      "thumbnail": "/assets/images/products/p-3.jpg",
+      "original": "/assets/images/products/p-3.jpg"
+    },
+    {
+      "id": 6,
+      "thumbnail": "/assets/images/products/p-3-1.jpg",
+      "original": "/assets/images/products/p-3-1.jpg"
+    }
+
+  ],
+  "quantity": 35,
+  "price": null,
+  "sale_price": null,
+  "brand": "Apple",
+  "operating": "iOS 17",
+  "screen": "6.1 Inches",
+  "model": "Model Name",
+  "tag": [
+    {
+      "id": 1,
+      "name": "Phone",
+      "slug": "phone"
+    },
+    {
+      "id": 2,
+      "name": "Apple",
+      "slug": "apple"
+    },
+    {
+      "id": 3,
+      "name": "Cilantro",
+      "slug": "cilantro"
+    },
+    {
+      "id": 4,
+      "name": "Smart TV",
+      "slug": "smart-tv"
+    }
+  ],
+  "product_type": "variable",
+  "max_price": 650,
+  "min_price": 550,
+  "variations": [
+    {
+      "id": 1,
+      "attribute_id": 1,
+      "value": "Pink",
+      "attribute": {
+        "id": 1,
+        "slug": "color",
+        "name": "Color",
+        "type": "swatch",
+        "values": [
+          {"id": 1, "attribute_id": 1, "value": "Pink","image": "/assets/images/products/p-3.jpg"},
+          {"id": 2, "attribute_id": 1, "value": "Black","image": "/assets/images/products/p-3-1.jpg"},
+          {"id": 3, "attribute_id": 1, "value": "White","image": "/assets/images/products/p-3-2.jpg"},
+          {"id": 4, "attribute_id": 1, "value": "Blue","image": "/assets/images/products/p-3-3.jpg"}
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "attribute_id": 2,
+      "value": "128GB",
+      "attribute": {
+        "id": 2,
+        "slug": "memory-storage",
+        "name": "Memory Storage",
+        "type": "rectangle",
+        "values": [
+          {"id": 2, "attribute_id": 2, "value": "128GB"},
+          {"id": 3, "attribute_id": 2, "value": "256GB"},
+          {"id": 4, "attribute_id": 2, "value": "512GB"}
+        ]
+      }
+    }
+  ],
+  "variation_options": [
+    {"id": 1, "title": "128GB - Pink", "price": 550, "quantity": 8, "sku": "200101-Pink", "is_disable": 0, "image": "/assets/images/products/p-3.jpg", "options": [{"name": "memory-storage", "value": "128GB"}, {"name": "color", "value": "Pink"}]},
+    {"id": 2, "title": "128GB - Black", "price": 550, "quantity": 8, "sku": "200101-BLACK", "is_disable": 0, "image": "/assets/images/products/p-3-1.jpg", "options": [{"name": "memory-storage", "value": "128GB"}, {"name": "color", "value": "Black"}]},
+    {"id": 3, "title": "128GB - White", "price": 550, "quantity": 8, "sku": "200101-WHITE", "is_disable": 0, "image": "/assets/images/products/p-3-2.jpg", "options": [{"name": "memory-storage", "value": "128GB"}, {"name": "color", "value": "White"}]},
+    {"id": 4, "title": "128GB - Blue", "price": 550, "quantity": 8, "sku": "200101-BLUE", "is_disable": 0, "image": "/assets/images/products/p-3-3.jpg", "options": [{"name": "memory-storage", "value": "128GB"}, {"name": "color", "value": "Blue"}]},
+
+    {"id": 5, "title": "256GB - Pink", "price": 600, "quantity": 12, "sku": "200102-Pink", "is_disable": 0, "image": "/assets/images/products/p-3.jpg", "options": [{"name": "memory-storage", "value": "256GB"}, {"name": "color", "value": "Pink"}]},
+    {"id": 6, "title": "256GB - Black", "price": 600, "quantity": 12, "sku": "200102-BLACK", "is_disable": 0, "image": "/assets/images/products/p-3-1.jpg", "options": [{"name": "memory-storage", "value": "256GB"}, {"name": "color", "value": "Black"}]},
+    {"id": 7, "title": "256GB - White", "price": 600, "quantity": 12, "sku": "200102-WHITE", "is_disable": 0, "image": "/assets/images/products/p-3-2.jpg", "options": [{"name": "memory-storage", "value": "256GB"}, {"name": "color", "value": "White"}]},
+    {"id": 8, "title": "256GB - Blue", "price": 600, "quantity": 12, "sku": "200102-BLUE", "is_disable": 0, "image": "/assets/images/products/p-3-3.jpg", "options": [{"name": "memory-storage", "value": "256GB"}, {"name": "color", "value": "Blue"}]},
+
+    {"id": 9, "title": "512GB - Pink", "price": 650, "quantity": 15, "sku": "200103-Pink", "is_disable": 0, "image": "/assets/images/products/p-3.jpg", "options": [{"name": "memory-storage", "value": "512GB"}, {"name": "color", "value": "Pink"}]},
+    {"id": 10, "title": "512GB - Black", "price": 650, "quantity": 15, "sku": "200103-BLACK", "is_disable": 0, "image": "/assets/images/products/p-3-1.jpg", "options": [{"name": "memory-storage", "value": "512GB"}, {"name": "color", "value": "Black"}]},
+    {"id": 11, "title": "512GB - White", "price": 650, "quantity": 15, "sku": "200103-WHITE", "is_disable": 0, "image": "/assets/images/products/p-3-2.jpg", "options": [{"name": "memory-storage", "value": "512GB"}, {"name": "color", "value": "White"}]},
+    {"id": 12, "title": "512GB - Blue", "price": 650, "quantity": 15, "sku": "200103-BLUE", "is_disable": 0, "image": "/assets/images/products/p-3-3.jpg", "options": [{"name": "memory-storage", "value": "512GB"}, {"name": "color", "value": "Blue"}]}
+
+  ]
+}

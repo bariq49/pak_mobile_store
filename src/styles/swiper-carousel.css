@@ -1,0 +1,112 @@
+/* React Swiper Carousel Custom css */
+.heightFull,
+.heightFull .carouselWrapper,
+.heightFull .carouselWrapper > .swiper,
+.heightFull .carouselWrapper > .swiper > .swiper-wrapper,
+.heightFull .carouselWrapper > .swiper > .swiper-wrapper .swiper-slide > div,
+.heightFull .carouselWrapper > .swiper > .swiper-wrapper .swiper-slide > a,
+.heightFull
+  .carouselWrapper
+  > .swiper
+  > .swiper-wrapper
+  .swiper-slide
+  > a
+  > .group,
+.heightFull a > div {
+  height: 100%;
+}
+.heightFull .carouselWrapper > .swiper > .swiper-wrapper .swiper-slide > a {
+  display: flex;
+}
+
+.swiper-wrapper .swiper-slide {
+  position: static;
+}
+.swiper .swiper-button-prev,
+.swiper .swiper-button-next {
+  display: none;
+}
+.carouselWrapper .swiper-button-disabled,
+#productGallery + div > .swiper-button-disabled {
+  cursor: not-allowed;
+  opacity: 0;
+  visibility: hidden;
+}
+.carouselWrapper .swiper-button-disabled:hover,
+#productGallery + div > .swiper-button-disabled:hover {
+  color: inherit;
+  background-color: #666;
+}
+span.swiper-pagination-bullet{
+  background-color: #ccc;
+}
+.carouselWrapper .swiper .swiper-pagination-bullets .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  opacity: 0.8;
+}
+.carouselWrapper .swiper .swiper-pagination-bullets {
+  bottom: 10px;
+}
+.carouselWrapper
+  .swiper
+  .swiper-pagination-bullets
+  .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  width: 28px;
+  opacity: 1;
+}
+.carouselWrapper.dotsCircleBlack
+  .swiper
+  .swiper-pagination-bullets
+  .swiper-pagination-bullet {
+  background-color: #000;
+}
+#productGalleryThumbs {
+  max-height: 580px;
+}
+#productGalleryThumbs .swiper-wrapper .swiper-slide {
+  /*height: auto !Important;*/
+  justify-content: center;
+  display: flex
+}
+#productGalleryThumbs .swiper-wrapper .swiper-slide-thumb-active {
+  border-color: #999;
+}
+
+@media screen and (min-width: 1024px) {
+
+  .carouselWrapper.dotsCircleBlack .swiper .swiper-pagination-bullets {
+    bottom: 0;
+  }
+  .carouselWrapper
+    .swiper
+    .swiper-pagination-bullets
+    .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .carouselWrapper
+    .swiper
+    .swiper-pagination-bullets
+    .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    width: 34px;
+    @apply bg-primary-500;
+  }
+}
+
+.swiper-multirow-column > .swiper-wrapper {
+  flex-direction: row;
+}
+
+/*.swiper-rtl {
+  direction: rtl;
+}
+.swiper-rtl .swiper-wrapper {
+  flex-direction: row-reverse;
+}*/
+
