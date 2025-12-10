@@ -11,8 +11,8 @@ const fetchProducts = async (options: QueryOptionsType) => {
 
 const useProductsQuery = (options: QueryOptionsType) => {
   return useQuery<Product[], Error>({
-    queryKey: ['products', options],// Unique key
-    queryFn: () =>   fetchProducts(options),
+    queryKey: ["products", options],
+    queryFn: () => fetchProducts(options),
   });
 };
 

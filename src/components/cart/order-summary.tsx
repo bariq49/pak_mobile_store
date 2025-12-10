@@ -1,75 +1,98 @@
+"use client";
 
-import { RadioGroup, RadioGroupItem } from "@/components/shared/radio-group"
 import React from "react";
-import Text from '@/components/shared/text';
-import Link from '@/components/shared/link';
-import {ROUTES} from '@/utils/routes';
-
-interface ShippingOption {
-	id: string
-	label: string
-	price: number
-}
+import Link from "@/components/shared/link";
+import { ROUTES } from "@/utils/routes";
+import usePrice from "@/services/product/use-price";
 
 interface OrderSummaryProps {
-	subtotal: number
-	shippingOptions: ShippingOption[]
-	selectedShipping: string
-	setSelectedShipping: (id: string) => void
-	total: number
+  subtotal: number;
+  discount?: number;
+  shippingFee?: number;
+  shippingMethod?: string | null;
+  total: number;
+  codFee?: number;
+  paymentMethod?: string | null;
 }
 
 export function OrderSummary({
-	                             subtotal,
-	                             shippingOptions,
-	                             selectedShipping,
-	                             setSelectedShipping,
-	                             total,
-                             }: OrderSummaryProps) {
-	return (
-		<div className={" p-5 md:p-8  bg-white  rounded-lg border border-border-base"}>
-			<div className="flex items-center justify-between pb-4 mb-5 border-b border-border-base font-medium text-brand-dark">
-				<h2 className=" text-lg  ">Subtotal</h2>
-				<span className="text-lg ">${subtotal.toFixed(2)}</span>
-			</div>
-			<div className="space-y-10">
-				<div className="space-y-2">
-					<h3 className="text-brand-dark mb-3 font-medium">Shipping</h3>
-					<RadioGroup value={selectedShipping} onValueChange={setSelectedShipping}>
-						{shippingOptions.map((option) => (
-							<div key={option.id} className="flex items-center space-x-2">
-								<RadioGroupItem value={option.id} id={option.id}/>
-								<label htmlFor={option.id} className="flex justify-between w-full text-15px">
-									<span>{option.label}:</span>
-									<span >${option.price.toFixed(2)}</span>
-								</label>
-							</div>
-						))}
-					</RadioGroup>
-				</div>
-				
-				<div className="flex justify-between font-bold text-lg pt-6 border-t border-border-base">
-					<span>Total</span>
-					<span>${total.toFixed(2)}</span>
-				</div>
-    
-			</div>
-            <Text className="text-15px leading-6 text-gray-500">
-                Taxes and shipping calculated at checkout
-            </Text>
+  subtotal,
+  discount = 0,
+  shippingFee = 0,
+  shippingMethod = "standard",
+  total,
+  codFee = 0,
+  paymentMethod = "stripe",
+}: OrderSummaryProps) {
+  const { price: formattedSubtotal } = usePrice({ amount: subtotal });
+  const { price: formattedDiscount } = usePrice({ amount: discount });
+  const { price: formattedShipping } = usePrice({ amount: shippingFee });
+  const { price: formattedTotal } = usePrice({ amount: total });
+  const { price: formattedCOD } = usePrice({ amount: codFee });
+  console.log("paymentMethod", paymentMethod);
+  return (
+    <div className="p-5 md:p-8 bg-white rounded-lg border border-border-base">
+      <h2 className="text-lg font-semibold text-brand-dark mb-5">
+        Order Summary
+      </h2>
 
-			<div className={"mt-6"}>
-                <Link
-                    href={ROUTES.CHECKOUT}
-                    variant={"button-black"}
-                    className="w-full"
-                >
-                    <span className="py-0.5">Check Out</span>
-                </Link>
-				
-				
-			</div>
-		</div>
-	)
+      <div className="space-y-2 mb-4">
+        {/* Subtotal */}
+        <div className="flex justify-between text-brand-dark">
+          <span>Subtotal</span>
+          <span>{formattedSubtotal}</span>
+        </div>
+
+        {/* Discount */}
+        {discount > 0 && (
+          <div className="flex justify-between text-green-600 font-medium">
+            <span>Discount</span>
+            <span>- {formattedDiscount}</span>
+          </div>
+        )}
+
+        {/* Shipping */}
+        <div className="flex justify-between text-brand-dark">
+          <span>
+            Shipping{" "}
+            {shippingMethod && (
+              <span className="text-sm text-gray-500">({shippingMethod})</span>
+            )}
+          </span>
+          {shippingFee > 0 ? (
+            <span>+ {formattedShipping}</span>
+          ) : (
+            <span className="text-green-600 font-medium">Free Shipping</span>
+          )}
+        </div>
+
+        {/* COD Fee */}
+        {codFee > 0 && (
+          <div className="flex justify-between text-brand-dark font-medium">
+            <span>COD Fee</span>
+            <span>+ {formattedCOD}</span>
+          </div>
+        )}
+        {paymentMethod === "cod" && codFee > 0 && (
+          <p className="text-sm text-gray-500 mt-1">
+            You selected <span className="font-semibold">Cash on Delivery</span>
+            . This is the additional COD fee.
+          </p>
+        )}
+      </div>
+
+      {/* Total */}
+      <div className="flex justify-between font-bold text-lg pt-6 border-t border-border-base">
+        <span>Total</span>
+        <span>{formattedTotal}</span>
+      </div>
+
+      {/* Checkout Button */}
+      <div className="mt-4">
+        <Link href={ROUTES.CHECKOUT} variant="button-black" className="w-full">
+          <span>Proceed to Checkout</span>
+        </Link>
+      </div>
+    </div>
+  );
 }
-

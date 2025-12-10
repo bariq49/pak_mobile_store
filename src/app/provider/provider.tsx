@@ -12,13 +12,10 @@ function Providers({children, ...props}: React.ComponentProps<typeof NextThemesP
 	}
 	
 	return (
-			<QueryClientProvider client={queryClientRef.current}>
-				<NextThemesProvider  {...props}>
-					{children}
-				</NextThemesProvider>
-				{/*<ReactQueryDevtools initialIsOpen={false} />*/}
-			</QueryClientProvider>
-	);
+    <QueryClientProvider client={queryClientRef.current}>
+      {children}
+    </QueryClientProvider>
+  );
 }
 
 export default Providers;

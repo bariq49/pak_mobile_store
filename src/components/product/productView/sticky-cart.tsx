@@ -23,17 +23,14 @@ interface Props {
 
 const StickyCart: React.FC<Props> = ({ product, addToCartLoader, handleAddToCart, targetButtonRef, isCartVisible, setCartVisible, isSelected }) => {
     const { price, basePrice } = usePrice({
-        amount: product?.sale_price ?? product?.price ?? 0,
-        baseAmount: product?.price ?? undefined,
-        currencyCode: 'USD'
+      amount: product?.sale_price ?? product?.price ?? 0,
+      baseAmount: product?.price ?? undefined,
     });
     const { price: minPrice } = usePrice({
-        amount: product?.min_price ?? 0,
-        currencyCode: 'USD',
+      amount: product?.min_price ?? 0,
     });
     const { price: maxPrice } = usePrice({
-        amount: product?.max_price ?? 0,
-        currencyCode: 'USD',
+      amount: product?.max_price ?? 0,
     });
     
     const { selectedColor } = usePanel();

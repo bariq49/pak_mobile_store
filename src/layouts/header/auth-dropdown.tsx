@@ -1,1 +1,213 @@
-"use client"import React, {useCallback, useRef, useState} from "react"import {Popover, PopoverButton, PopoverPanel} from "@headlessui/react"import { User, ShoppingBag, Heart,  HelpCircle, LogOut } from "lucide-react"import AccountIcon from "@/components/icons/account-icon";import {useRouter} from "next/navigation";import {ROUTES} from "@/utils/routes";import {usePanel} from "@/hooks/use-panel";import {colorMap} from "@/data/color-settings";import {useModal} from "@/hooks/use-modal";import { useUI } from '@/hooks/use-UI';import {useLogoutMutation} from "@/services/auth/use-logout";import Cookies from "js-cookie";import cn from "classnames";type Variant = 'Border' | 'Border-white' | 'Normal';interface UserDropdownProps {    hideLabel?: boolean    userName?: string    userLocation?: string    userImage?: string    variant?: Variant;}export default function AuthDropdown({                                         variant='Normal',                                         hideLabel,                                         userName = "Luhan Nguyen",                                         userLocation = "Los Angeles, CA",                                         userImage = "/assets/images/support/3.png",                                     }: UserDropdownProps) {    const [isOpen, setIsOpen] = useState(false)    const buttonRef = useRef<HTMLButtonElement>(null)    const { selectedColor,selectedDirection } = usePanel();    const dir = selectedDirection;    const router = useRouter();    const { openModal } = useModal();    const { isAuthorized } = useUI();    const { mutate: logout } = useLogoutMutation();    const isLoggedIn = isAuthorized ?? !!Cookies.get('auth_token');        const handleNavigation = (route: string) => {        // Close the popover        setIsOpen(false)        buttonRef.current?.click()        // Navigate to the route        router.push(route);    }        const handleLogout = useCallback(() => {            setIsOpen(false);            buttonRef.current?.click();            logout(undefined, {                onSuccess: () => {},                onError: (error) => {                    console.error('Logout failed:', error.message);                },            });        }, [logout]);    const handleLogin = useCallback(() => {        openModal('LOGIN_VIEW');    }, [openModal]);    const sizeIcon = variant ==='Border'  ? `w-5 h-5 ${colorMap[selectedColor].text}`:        variant ==='Border-white'  ? `w-5 h-5 text-brand-light`            : '';            if (!isLoggedIn) {        return (            <button                className={cn(                    'hidden lg:flex items-center focus:outline-none group',                    hideLabel ? '' : 'text-sm font-normal'                )}                onClick={handleLogin}            >                <div                        className={cn(                            'cart-button',                            {                                [`${colorMap[selectedColor].groupHoverBorder} w-11 h-11 flex justify-center items-center rounded-full border-2`]:                                variant === 'Border',                                [`${colorMap[selectedColor].groupHoverBorder} w-11 h-11 flex justify-center items-center rounded-full border-2 xs:border-brand-light`]:                                variant === 'Border-white',                            },                            'border-brand-light/20'                        )}                    >                        <AccountIcon className={sizeIcon} />                    </div>                {!hideLabel && <span className="text-sm font-normal ms-2">Sign in</span>}            </button>        );    }        return (        <Popover className="relative">            <PopoverButton                ref={buttonRef}                className={`hidden lg:flex items-center  focus:outline-none group `}                onClick={() => setIsOpen(!isOpen)}            >                <div className={cn("cart-button",{                        [`${colorMap[selectedColor].groupHoverBorder} w-11 h-11 flex justify-center items-center rounded-full border-2 `] : variant ==='Border',                        [`${colorMap[selectedColor].groupHoverBorder} w-11 h-11 flex justify-center items-center rounded-full border-2 xs:border-brand-light`] : variant ==='Border-white',                    },                        isOpen                        ? ` ${colorMap[selectedColor].border}`                        : "border-brand-light/20",                    )}>                    <AccountIcon className={sizeIcon}/>                </div>                {!hideLabel && (<span className="text-sm font-normal ms-2"> My Account</span>)}            </PopoverButton>                        <PopoverPanel                transition                className="absolute end-0 z-10 mt-4 w-70 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition duration-200 ease-in-out"                onFocus={() => setIsOpen(true)}                onBlur={() => setIsOpen(false)}            >                <div className="pt-4">                    {/* User Profile */}                    <div className="flex items-center gap-3 px-4 pb-4 border-b border-gray-100 ">                        <img src={userImage} alt={userName} className="w-12 h-12 rounded-full object-cover"/>                        <div>                            <h3 className="font-medium text-brand-dark">{userName}</h3>                            <p className="text-sm text-gray-500">{userLocation}</p>                        </div>                    </div>                                        {/* Menu Items */}                    <div className="py-1">                        <MenuItem icon={<User className="w-5 h-5"/>} label="My Account"                                  onClick={() => handleNavigation(ROUTES.ACCOUNT)}/>                        <MenuItem icon={<ShoppingBag className="w-5 h-5"/>} label="My Order"                                  onClick={() => handleNavigation(ROUTES.ORDERS)}/>                        <MenuItem icon={<Heart className="w-5 h-5"/>} label="Wishlist"                                  onClick={() => handleNavigation(ROUTES.SAVELISTS)}/>                    </div>                                        <div className="border-t border-gray-100 py-2">                        <MenuItem icon={<HelpCircle className="w-5 h-5"/>} label="Help"/>                        <MenuItem icon={<LogOut className="w-5 h-5"/>} label="Log out" onClick={handleLogout}/>                    </div>                </div>            </PopoverPanel>        </Popover>    )}function MenuItem({                      icon,                      label,                      onClick,                  }: {    icon: React.ReactNode    label: string    onClick?: () => void}) {    const { selectedColor } = usePanel();    return (        <button className={`flex items-center w-full px-4 py-3 text-sm text-body hover:bg-gray-50 ${colorMap[selectedColor].hoverLink}`} onClick={onClick}>            <span className="me-3 ">{icon}</span>            <span>{label}</span>        </button>    )}
+"use client";
+
+import React, { useCallback, useRef } from "react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { User, ShoppingBag, Heart, HelpCircle, LogOut } from "lucide-react";
+import AccountIcon from "@/components/icons/account-icon";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/utils/routes";
+import { useModal } from "@/hooks/use-modal";
+import { useUI } from "@/hooks/use-UI";
+import { useLogoutMutation } from "@/services/auth/use-logout";
+import { useCurrentUserQuery } from "@/services/customer/use-current-user";
+import Cookies from "js-cookie";
+import cn from "classnames";
+
+interface UserDropdownProps {
+  hideLabel?: boolean;
+}
+
+export default function AuthDropdown({ hideLabel }: UserDropdownProps) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+  const { openModal } = useModal();
+  const { isAuthorized } = useUI();
+  const { mutate: logout } = useLogoutMutation();
+  const { data: currentUser, refetch } = useCurrentUserQuery();
+  const isLoggedIn = isAuthorized ?? !!Cookies.get("auth_token");
+
+  const handleLogout = useCallback(() => {
+    logout();
+  }, [logout]);
+
+  // Login handler
+  const handleLogin = useCallback(() => {
+    openModal("LOGIN_VIEW");
+  }, [openModal]);
+
+  if (!isLoggedIn) {
+    return (
+      <button
+        className={cn(
+          "hidden lg:flex items-center focus:outline-none group",
+          hideLabel ? "" : "text-sm font-normal"
+        )}
+        onClick={handleLogin}
+      >
+        <div
+          className={cn(
+            "cart-button w-11 h-11 flex justify-center items-center rounded-full border-2 border-brand-light/90 group-hover:border-brand-muted"
+          )}
+        >
+          <AccountIcon className="w-5 h-5 text-brand-light group-hover:text-brand-light/60" />
+        </div>
+        {!hideLabel && (
+          <span className="text-sm font-normal ms-2 text-brand-light group-hover:text-brand-light/60">
+            Sign in
+          </span>
+        )}
+      </button>
+    );
+  }
+
+  // Menu configuration
+  const mainMenu = [
+    {
+      icon: <User className="w-5 h-5" />,
+      label: "My Account",
+      action: () => router.push(ROUTES.ACCOUNT),
+    },
+    {
+      icon: <ShoppingBag className="w-5 h-5" />,
+      label: "My Orders",
+      action: () => router.push(ROUTES.ORDERS),
+    },
+    {
+      icon: <Heart className="w-5 h-5" />,
+      label: "Wishlist",
+      action: () => router.push(ROUTES.SAVELISTS),
+    },
+  ];
+
+  const footerMenu = [
+    { icon: <HelpCircle className="w-5 h-5" />, label: "Help" },
+    {
+      icon: <LogOut className="w-5 h-5" />,
+      label: "Log out",
+      action: handleLogout,
+    },
+  ];
+
+  return (
+    <Popover className="relative">
+      {({ open }) => (
+        <>
+          <PopoverButton
+            ref={buttonRef}
+            className="hidden lg:flex items-center focus:outline-none group"
+          >
+            <div
+              className={cn(
+                "cart-button w-11 h-11 flex justify-center items-center rounded-full border-2 transition-colors duration-200",
+                open
+                  ? "border-brand-light/60 bg-brand-light/10"
+                  : "border-border-one group-hover:border-brand-light/60"
+              )}
+            >
+              <AccountIcon
+                className={cn(
+                  "w-5 h-5 transition-colors duration-200",
+                  open
+                    ? "text-brand-light/80"
+                    : "text-brand-light group-hover:text-brand-light/60"
+                )}
+              />
+            </div>
+            {!hideLabel && (
+              <span
+                className={cn(
+                  "text-sm font-normal ms-2 transition-colors duration-200",
+                  open
+                    ? "text-brand-light/80"
+                    : "group-hover:text-brand-light/60"
+                )}
+              >
+                My Account
+              </span>
+            )}
+          </PopoverButton>
+
+          <PopoverPanel
+            transition
+            className="absolute end-0 z-10 mt-4 w-70 origin-top-right rounded-md bg-brand-light shadow-lg ring-1 ring-border-base/90 transition duration-200 ease-in-out"
+          >
+            <div className="pt-4">
+              <UserProfile user={currentUser} />
+              <div className="py-1">
+                {mainMenu.map((item) => (
+                  <MenuItem
+                    key={item.label}
+                    icon={item.icon}
+                    label={item.label}
+                    onClick={item.action}
+                  />
+                ))}
+              </div>
+              <div className="border-t border-border-base py-1">
+                {footerMenu.map((item) => (
+                  <MenuItem
+                    key={item.label}
+                    icon={item.icon}
+                    label={item.label}
+                    onClick={item.action}
+                  />
+                ))}
+              </div>
+            </div>
+          </PopoverPanel>
+        </>
+      )}
+    </Popover>
+  );
+}
+
+function MenuItem({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      className="flex items-center w-full px-4 py-3 text-sm text-primary-500 hover:bg-brand-muted hover:text-brand-light transition-colors duration-200"
+      onClick={onClick}
+    >
+      <span className="me-3">{icon}</span>
+      <span>{label}</span>
+    </button>
+  );
+}
+
+function UserProfile({
+  user,
+}: {
+  user?: { avatar?: string; name?: string; email?: string };
+}) {
+  const formattedName = user?.name
+    ? user.name.charAt(0).toUpperCase() + user.name.slice(1).toLowerCase()
+    : "Guest";
+  const initial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
+
+  return (
+    <div className="flex items-center gap-3 px-4 pb-4 border-b border-border-base">
+      {user?.avatar ? (
+        <img
+          src={user.avatar}
+          alt={formattedName}
+          className="w-12 h-12 rounded-full object-cover"
+        />
+      ) : (
+        <div className="w-12 h-12 flex items-center justify-center rounded-full border bg-brand-light text-brand-muted font-semibold text-lg">
+          {initial}
+        </div>
+      )}
+      <div className="mt-1">
+        <h3 className="font-medium text-brand-dark">{formattedName}</h3>
+        <p className="text-sm text-brand-muted">{user?.email || "No email"}</p>
+      </div>
+    </div>
+  );
+}

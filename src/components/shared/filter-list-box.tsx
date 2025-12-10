@@ -33,8 +33,7 @@ export default function ListBox({
   }, [currentSelectedItem]);
 
   useEffect(() => {
-    updateQueryparams('sort_by', currentSelectedItem.value.toString());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    updateQueryparams("sort_by", currentSelectedItem.value.toString());
   }, [currentSelectedItem.value]);
 
   function handleItemClick(value: string) {

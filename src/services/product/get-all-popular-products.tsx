@@ -5,12 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 
 export const fetchPopularProducts = async ({ queryKey }: any) => {
   const { data } = await http.get(API_RESOURCES.POPULAR_PRODUCTS);
-  return data as Product[];
+  const products = data?.data?.products;
+  return products as Product[];
 };
 
 export const usePopularProductsQuery = (options?: QueryOptionsType) => {
   return useQuery<Product[], Error>({
-    queryKey: [API_RESOURCES.POPULAR_PRODUCTS, options],
+    queryKey: ["popular-products", options],
     queryFn: () => fetchPopularProducts(options),
   });
 };

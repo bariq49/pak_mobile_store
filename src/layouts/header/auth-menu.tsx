@@ -1,14 +1,14 @@
-import Link from '@/components/shared/link';
+import Link from "@/components/shared/link";
 import cn from "classnames";
 import Cookies from "js-cookie";
-import {useUI} from "@/hooks/use-UI";
+import { useUI } from "@/hooks/use-UI";
 
-import React, {useCallback} from "react";
-import {useModal} from "@/hooks/use-modal";
-import {ROUTES} from "@/utils/routes";
+import React, { useCallback } from "react";
+import { useModal } from "@/hooks/use-modal";
+import { ROUTES } from "@/utils/routes";
 
 interface Props {
-    className?: string;
+  className?: string;
 }
 
 export default function AuthMenu({
@@ -18,27 +18,27 @@ export default function AuthMenu({
   const { isAuthorized } = useUI();
   const { openModal } = useModal();
 
-  const isLoggedIn = isAuthorized ?? !!Cookies.get('auth_token');
+  const isLoggedIn = isAuthorized ?? !!Cookies.get("auth_token");
   const handleLogin = useCallback(() => {
-    openModal('LOGIN_VIEW');
+    openModal("LOGIN_VIEW");
   }, [openModal]);
 
   if (!isLoggedIn) {
     return (
-        <button
-            className={cn(
-                'flex items-center focus:outline-none group',
-            )}
-            onClick={handleLogin}
-        >
-          {children}
-        </button>
+      <button
+        className={cn("flex items-center focus:outline-none group")}
+        onClick={handleLogin}
+      >
+        {children}
+      </button>
     );
   }
-  return <Link
+  return (
+    <Link
       href={ROUTES.ACCOUNT}
-      className={cn('text-sm font-normal focus:outline-none', className)}
-  >
-    {children}
-  </Link>;
+      className={cn("text-sm font-normal focus:outline-none", className)}
+    >
+      {children}
+    </Link>
+  );
 }

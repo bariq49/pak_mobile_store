@@ -13,17 +13,14 @@ const ComparePricing: React.FC<ComparePricingProps> = ({ product }) => {
     const { product_type, sale_price, price, min_price, max_price } = product;
     const { selectedColor } = usePanel();
     const { price: displayPrice, basePrice } = usePrice({
-        amount: sale_price ? sale_price : price,
-        baseAmount: price,
-        currencyCode: "USD",
+      amount: sale_price ? sale_price : price,
+      baseAmount: price,
     });
     const { price: minPrice } = usePrice({
-        amount: min_price ?? 0,
-        currencyCode: "USD",
+      amount: min_price ?? 0,
     });
     const { price: maxPrice } = usePrice({
-        amount: max_price ?? 0,
-        currencyCode: "USD",
+      amount: max_price ?? 0,
     });
 
     return (

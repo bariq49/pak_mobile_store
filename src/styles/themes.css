@@ -9,11 +9,6 @@
     body {
         @apply antialiased  text-body ;
     }
-
-    p {
-        @apply mb-5;
-    }
-
     p:last-of-type {
         @apply mb-0;
     }

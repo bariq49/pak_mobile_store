@@ -1,7 +1,8 @@
 const FilterIcon = ({
-  color = 'currentColor',
-  width = '16px',
-  height = '12px',
+  color = "currentColor",
+  width = "16px",
+  height = "12px",
+  className = "",
 }) => {
   return (
     <svg
@@ -9,6 +10,7 @@ const FilterIcon = ({
       width={width}
       height={height}
       viewBox="0 0 18 14"
+      className={className}
     >
       <g
         id="Group_36196"

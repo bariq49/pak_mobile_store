@@ -1,6 +1,12 @@
-import { useUI } from '@/hooks/use-UI';
-import Cookies from 'js-cookie';
-import { useMutation } from '@tanstack/react-query';
+"use client";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import http from "@/services/utils/http";
+import { API_RESOURCES } from "@/services/utils/api-endpoints";
+import { toast } from "react-hot-toast";
+import { useModal } from "@/hooks/use-modal";
+import { useUI } from "@/hooks/use-UI";
 
 export interface LoginInputType {
   email: string;
@@ -8,54 +14,45 @@ export interface LoginInputType {
   remember_me: boolean;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   token: string;
+  user?: any;
+  data?: any;
+  message?: string;
 }
 
-export class LoginError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'LoginError';
-  }
+// API Call
+async function loginApi(input: LoginInputType): Promise<LoginResponse> {
+  const { data } = await http.post<LoginResponse>(API_RESOURCES.LOGIN, input);
+  return data;
 }
 
-async function login(input: LoginInputType): Promise<LoginResponse> {
-  // Simulate credential validation
-  const validCredentials = {
-    email: 'guest@demo.com',
-    password: 'admin',
-  };
-  
-  if (
-      input.email !== validCredentials.email ||
-      input.password !== validCredentials.password
-  ) {
-    throw new LoginError('Login failed. Please check your credentials');
-  }
-  
-  return {
-    token: `${input.email}.${input.remember_me}`.split('').reverse().join(''),
-  };
-}
-
-export const useLoginMutation = () => {
+// Custom Mutation
+export const useLoginMutation = (onReset?: () => void) => {
+  const { closeModal } = useModal();
   const { authorize } = useUI();
-  return useMutation<LoginResponse, LoginError, LoginInputType>({
-    mutationFn: login,
+  const queryClient = useQueryClient();
+
+  return useMutation<LoginResponse, any, LoginInputType>({
+    mutationFn: loginApi,
     onSuccess: (data) => {
-      Cookies.set('auth_token', data.token, {
+      Cookies.set("auth_token", data?.data?.token, {
         expires: 7,
         secure: true,
-        sameSite: 'Strict',
+        sameSite: "Strict",
       });
+
+      toast.success(data?.message || "Login successful");
       authorize();
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      closeModal();
+      if (onReset) onReset();
     },
-    onError: (error) => {
-      if (error instanceof LoginError) {
-        console.log('Login error :', error.message);
-      } else {
-        console.error('Unexpected error:', error);
-      }
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        "Login failed. Please check your credentials.";
+      toast.error(message);
     },
   });
 };

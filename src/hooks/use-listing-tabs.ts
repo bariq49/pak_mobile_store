@@ -1,19 +1,20 @@
-'use client';
-import { useState, useTransition } from 'react';
+"use client";
+import { useState, useTransition } from "react";
 
 export const useListingTabs = () => {
-    const [activeTab, setActiveTab] = useState(1);
-    const [isPending, startTransition] = useTransition();
+  // activeTab will store category slug
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-    const handleTabClick = (category: number) => {
-        startTransition(() => {
-            setActiveTab(category);
-        });
-    };
+  const handleTabClick = (categorySlug: string) => {
+    startTransition(() => {
+      setActiveTab(categorySlug);
+    });
+  };
 
-    return {
-        activeTab,
-        isPending,
-        handleTabClick,
-    };
+  return {
+    activeTab,
+    isPending,
+    handleTabClick,
+  };
 };

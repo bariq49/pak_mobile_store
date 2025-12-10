@@ -1,47 +1,48 @@
-'use client';
+"use client";
 
-import HeroSliderCard from '@/components/hero/hero-slider-card';
-import Carousel from '@/components/shared/carousel/carousel';
-import {SwiperSlide} from '@/components/shared/carousel/slider';
+import HeroSliderCard from "@/components/hero/hero-slider-card";
+import Carousel from "@/components/shared/carousel/carousel";
+import { SwiperSlide } from "@/components/shared/carousel/slider";
+import { useDealsQuery } from "@/services/deals/get-banner-deals";
 
-interface Props {
-    heroBanner?: any;
-    className?: string;
-    variant?: string;
-    contentClassName?: string;
-    showHeroContent?: boolean;
-}
+export default function HeroSliderBlock() {
+  const { data: deals, isLoading, isError } = useDealsQuery();
 
-const HeroSliderBlock: React.FC<Props> = ({
-          heroBanner,
-          variant='hero',
-          className = 'mb-7',
-          contentClassName = 'px-5 py-10 xl:py-24',
-          showHeroContent = true,
-      }) => {
+  if (isLoading)
     return (
-        <div className={`${className}`}>
-            <Carousel
-                pagination={{
-                    clickable: true,
-                }}
-                autoplay={false}
-                prevActivateId={`prevActivateId`}
-                nextActivateId={`nextActivateId`}
-            >
-                {heroBanner?.map((banner: never,index:number) => (
-                    <SwiperSlide key={`hero-slider${index}`}>
-                        <HeroSliderCard
-                            banner={banner}
-                            variant={variant}
-                            className={contentClassName}
-                            heroContentCard={showHeroContent}
-                        />
-                    </SwiperSlide>
-                ))}
-            </Carousel>
-        </div>
+      <div className="flex justify-center items-center min-h-[300px]">
+        <p className="text-gray-500">Loading deals...</p>
+      </div>
     );
-};
 
-export default HeroSliderBlock;
+  if (isError)
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <p className="text-red-500">Failed to load deals.</p>
+      </div>
+    );
+
+  if (!deals?.length)
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <p className="text-gray-500">No active deals available.</p>
+      </div>
+    );
+
+  return (
+    <div className="mb-7">
+      <Carousel
+        pagination={{ clickable: true }}
+        autoplay={{ delay: 5000 }}
+        prevActivateId="prevActivateId"
+        nextActivateId="nextActivateId"
+      >
+        {deals.map((deal, index) => (
+          <SwiperSlide key={`hero-slider-${deal._id || index}`}>
+            <HeroSliderCard banner={deal} />
+          </SwiperSlide>
+        ))}
+      </Carousel>
+    </div>
+  );
+}

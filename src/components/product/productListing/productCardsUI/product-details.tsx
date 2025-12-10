@@ -1,46 +1,72 @@
 import React from "react";
 import Link from "@/components/shared/link";
 import { Product } from "@/services/types";
-import StarIcon from "@/components/icons/star-icon";
+import { Star } from "lucide-react";
 import { ROUTES } from "@/utils/routes";
-import cn from "classnames";
 
 interface ProductDetailsProps {
-    product: Product;
-    variant?: string;
+  product: Product;
 }
 
-const ProductDetails: React.FC<ProductDetailsProps> = ({ product,variant="default" }) => {
-    const { name, slug } = product;
-    
-    return (
-        <>
-            <Link
-                href={`${ROUTES.PRODUCT}/${slug}`}
-                className={cn("  leading-5  line-clamp-2 mt-1 mb-2",
-                    {
-                        "text-brand-dark text-sm min-h-[40px]": variant === "default" || variant === "large",
-                        "text-fill-purple text-sm min-h-[40px]": variant === "outBorder" || variant === "cardList" ,
-                        "text-brand-dark text-base font-semibold min-h-[30px]": variant === "list" || variant === "bestdeal"  ,
-                        "text-fill-purple text-sm dark:text-black min-h-[40px]": variant === "furni"
-                    })}
-            >
-                {name}
-            </Link>
-            <div className="flex text-gray-500 space-x-2">
-                <div className="flex items-center">
-                    {[...Array(5)].map((_, idx) => (
-                        <StarIcon
-                            key={idx}
-                            color={idx < 5 ? "#F3B81F" : "#DFE6ED"}
-                            className="w-3 h-3 mx-px"
-                        />
-                    ))}
-                </div>
-                <span className="text-[13px] leading-4">(2 reviews)</span>
-            </div>
-        </>
-    );
+const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
+  const { name, slug } = product;
+
+  // Safely extract rating values with proper fallbacks
+  const rating =
+    typeof product.ratingsAverage === "number" ? product.ratingsAverage : 0;
+  const reviewCount =
+    typeof product.ratingsQuantity === "number" ? product.ratingsQuantity : 0;
+
+  return (
+    <>
+      <Link
+        href={`${ROUTES.PRODUCT}/${slug}`}
+        className="text-brand-dark text-sm leading-5 line-clamp-2 mt-1 mb-2 hover:text-brand-muted"
+      >
+        {name}
+      </Link>
+      <div className="flex text-brand-muted space-x-2">
+        <div className="flex items-center">
+          {[...Array(5)].map((_, idx) => {
+            const starValue = idx + 1;
+            const isFull = starValue <= rating;
+            const isHalf = !isFull && starValue - 0.5 <= rating;
+            return (
+              <div key={idx} className="relative inline-block mx-px">
+                <Star
+                  stroke="var(--color-brand-muted)"
+                  fill="white"
+                  size={12}
+                />
+                {rating > 0 && (
+                  <>
+                    {isFull ? (
+                      <Star
+                        fill="#F3B81F"
+                        stroke="#F3B81F"
+                        size={12}
+                        className="absolute inset-0"
+                      />
+                    ) : isHalf ? (
+                      <div
+                        className="absolute inset-0 overflow-hidden"
+                        style={{ width: "50%" }}
+                      >
+                        <Star fill="#F3B81F" stroke="#F3B81F" size={12} />
+                      </div>
+                    ) : null}
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <span className="text-[13px] leading-4">
+          ({reviewCount} review{reviewCount !== 1 ? "s" : ""})
+        </span>
+      </div>
+    </>
+  );
 };
 
 export default ProductDetails;

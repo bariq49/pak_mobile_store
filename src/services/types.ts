@@ -1,4 +1,5 @@
-import type {SwiperOptions} from "swiper/types";
+import type { SwiperOptions } from "swiper/types";
+
 export type CategoriesQueryOptionsType = {
   text?: string;
   category?: string;
@@ -12,8 +13,28 @@ export type QueryOptionsType = {
   status?: string;
   id?: string;
   limit?: number;
-  sort_by?: string; // Added for newQuery
+  sort_by?: string;
+  min_price?: number;
+  price_max?: number;
+  categories?: string[];
+  colors?: string[];
+  sizes?: string[];
+  isOnSale?: boolean;
+  parent?: string;
+  child?: string;
 };
+
+// 🆕 ProductsResponse type for products + pagination
+export interface ProductsResponse {
+  data: any;
+  products: Product[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+    limit: number;
+  };
+}
 
 export interface PaginatedProduct {
   data: Product[];
@@ -29,40 +50,77 @@ export type Attachment = {
   original: string;
   original2: string;
 };
+
 export type Category = {
   id: number;
   name: string;
   slug: string;
   image?: Attachment;
-  children?: [Category];
+  children?: Category[];
   products?: Product[];
   productCount?: number;
   [key: string]: unknown;
 };
-
 
 export type Tag = {
   id: string | number;
   name: string;
   slug: string;
 };
+
+export type AdditionalInfo = {
+  key: string;
+  value: string;
+};
+
+export type RatingDistribution = {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+};
+
+export type RatingSummary = {
+  average: number;
+  total: number;
+  distribution: RatingDistribution;
+};
+
+export type ReviewUser = {
+  _id: string;
+  name: string;
+  email?: string;
+  avatar?: string; // optional user profile picture
+};
+
+export type Review = {
+  _id: string;
+  user: ReviewUser;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  updatedAt?: string;
+};
+
 export type Product = {
   id: number | string;
+  _id?: string;
   name: string;
   slug: string;
   price: number;
   quantity: number;
   sold: number;
-  videoUrl: string;
+  videoUrl?: string;
   sale_price?: number;
   min_price?: number;
   max_price?: number;
   variation_options: VariationOption[];
   variations?: Variation[];
-  image: Attachment;
+  image?: Attachment;
   sku?: string;
   gallery?: Attachment[];
-  category: Category[];
+  category: Category[]; // can be multiple
   tag?: Tag[];
   meta?: never[];
   brand: string;
@@ -71,13 +129,28 @@ export type Product = {
   operating?: string;
   screen?: string;
   description?: string;
-  rating:number;
-  discountPercentage:number;
-  weight:number;
+  product_details?: string;
+  rating: number;
+  discountPercentage: number;
+  weight: number;
+  on_sale?: boolean;
+  in_stock?: boolean;
+  is_active?: boolean;
+  deletedAt?: string | null;
+  ratingsAverage?: number;
+  ratingsQuantity?: number;
+  reviews?: Review[];
+  reviewsCount?: number;
+  ratingSummary?: RatingSummary;
+  additional_info?: AdditionalInfo[];
+  createdAt?: string;
+  updatedAt?: string;
   [key: string]: unknown;
 };
 
+
 interface VariationValue {
+  _id: number;
   id: number;
   attribute_id: number;
   value: string;
@@ -85,10 +158,17 @@ interface VariationValue {
 }
 
 interface Attribute {
+  _id: any;
   id: number;
   slug: string;
   name: string;
-  type: 'swatch' | 'radio' | 'rectangle' | 'rectangleColor' | 'swatchImage' | 'dropdown';
+  type:
+    | "swatch"
+    | "radio"
+    | "rectangle"
+    | "rectangleColor"
+    | "swatchImage"
+    | "dropdown";
   values: VariationValue[];
 }
 
@@ -107,18 +187,24 @@ export interface VariationItem {
 
 export interface VariationsType {
   [key: string]: {
-    type: 'swatch' | 'radio' | 'rectangle' | 'rectangleColor' | 'swatchImage' | 'dropdown';
+    type:
+      | "swatch"
+      | "radio"
+      | "rectangle"
+      | "rectangleColor"
+      | "swatchImage"
+      | "dropdown";
     options: VariationItem[];
   };
 }
 
-// Define types based on the new data structure
 export interface Option {
   name: string;
   value: string;
 }
 
 export interface VariationOption {
+  attributes: any;
   id: number;
   title: string;
   price: number;
@@ -159,13 +245,14 @@ export type HeroItem = {
   description: string;
   btnText: string;
   btnUrl: string;
-  videoUrl?:string;
+  videoUrl?: string;
   image: HeroItemImage;
-}
+};
 export type HeroItemImage = {
   mobile: { url: string };
   desktop: { url: string };
-}
+};
+
 export type Blog = {
   id: number;
   slug: string;
@@ -207,18 +294,18 @@ export type MainMenuType = {
   mega_categoryCol: number;
   mega_bannerMode: string;
   mega_bannerImg: string;
-  mega_bannerUrl:string;
-  mega_contentBottom:string;
-  subMenu:SubMenuType[];
+  mega_bannerUrl: string;
+  mega_contentBottom: string;
+  subMenu: SubMenuType[];
 };
 
 export type SubMenuType = {
   id: number;
   path: string;
   label: string;
-  image?: Attachment,
-  badge?:string;
-  subMenu?:SubMenuType[];
+  image?: Attachment;
+  badge?: string;
+  subMenu?: SubMenuType[];
 };
 
 export type BreakpointsType = {
@@ -227,12 +314,12 @@ export type BreakpointsType = {
 };
 
 export type StoreType = {
-  id: number ;
+  id: number;
   name: string;
   image?: string;
   address?: string;
   email?: string;
-  phoneNumber?:number
+  phoneNumber?: number;
   openTime?: string;
   location?: string;
 };
@@ -244,23 +331,23 @@ export type AccordionItem = {
 };
 
 export type IconType = {
-  color?:string;
+  color?: string;
   className?: string;
   width?: number;
   height?: number;
-}
+};
 export type AccordionGroupProps = {
   items: AccordionItem[];
-  variant?: 'underline' | 'transparent';
+  variant?: "underline" | "transparent";
 };
 
 export type CollapseProps = {
   item: AccordionItem;
-  variant?: 'underline' | 'transparent';
+  variant?: "underline" | "transparent";
   isOpen: boolean;
   onToggle: () => void;
 };
 
-export type ThemeMode = "light" | "dark"
-export type ThemeDirection = "ltr" | "rtl"
-export type TabType = "COLOR" | "LAYOUT" | "THEME"
+export type ThemeMode = "light" | "dark";
+export type ThemeDirection = "ltr" | "rtl";
+export type TabType = "COLOR" | "LAYOUT" | "THEME";

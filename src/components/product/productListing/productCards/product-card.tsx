@@ -6,48 +6,42 @@ import ProductDetails from "@/components/product/productListing/productCardsUI/p
 import ProductPricing from "@/components/product/productListing/productCardsUI/product-pricing";
 import ProductActions from "@/components/product/productListing/productCardsUI/product-actions";
 import BtnRemoveWishlist from "@/components/product/productListing/productCardsUI/btn-remove-wishlist";
-import {useCart} from "@/hooks/use-cart";
+import { useCart } from "@/hooks/use-cart";
 
 interface ProductProps {
-    product: Product;
-    className?: string;
-    variant?: string;
-    removeWishlist?: (id: string) => void;
+  product: Product;
+  className?: string;
+  removeWishlist?: (id: string) => void;
 }
 
 const ProductCard: React.FC<ProductProps> = ({
-                                                 product,
-                                                 className,
-                                                 variant = "default",
-                                                 removeWishlist,
-                                             }) => {
-    const { id, quantity } = product;
-    const { useCartHelpers } = useCart();
-    const {outOfStock} = useCartHelpers();
-    const statusOutOfStock = outOfStock(id) || quantity < 1;
-   
-    return (
-        <article
-            className={cn(
-                "flex flex-col md:gap-2 product-card px-2 md:px-3 h-full relative bg-white",
-                removeWishlist && "border border-border-two rounded",
-                className,
-                statusOutOfStock ? "card-image--nojump" : "card-image--jump",
-                {
-                    "hover:drop-shadow-cardhori hover:z-50": variant === "boxBorder",
-                    block: variant === "default",
-                }
-            )}
-        >
-            <BtnRemoveWishlist product={product} removeWishlist={removeWishlist} />
-            <ProductImage product={product} outOfStock={statusOutOfStock}  />
-            <div className="flex flex-col mb-1.5  overflow-hidden relative  items-center text-center">
-                <ProductDetails product={product} variant={variant}/>
-                <ProductPricing product={product} variant={variant}/>
-                <ProductActions product={product}  />
-            </div>
-        </article>
-    );
+  product,
+  className,
+  removeWishlist,
+}) => {
+  const { id, quantity } = product;
+  const { useCartHelpers } = useCart();
+  const { outOfStock } = useCartHelpers();
+  const statusOutOfStock = outOfStock(id) || quantity < 1;
+
+  return (
+    <article
+      className={cn(
+        "flex flex-col md:gap-2 product-card px-2 md:px-3 h-full relative",
+        removeWishlist && "border border-border-base rounded",
+        className,
+        statusOutOfStock ? "card-image--nojump" : "card-image--jump"
+      )}
+    >
+      <BtnRemoveWishlist product={product} removeWishlist={removeWishlist} />
+      <div className="flex flex-col mb-1.5 overflow-hidden relative items-center border-border-base">
+        <ProductImage product={product} outOfStock={statusOutOfStock} />
+        <ProductDetails product={product} />
+        <ProductPricing product={product} />
+        <ProductActions product={product} />
+      </div>
+    </article>
+  );
 };
 
 export default ProductCard;

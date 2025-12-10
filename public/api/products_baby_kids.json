@@ -1,0 +1,420 @@
+[
+  {
+    "id": "baby1",
+    "name": "Premium Baby Stroller with Canopy",
+    "slug": "premium-baby-stroller-with-canopy",
+    "description": "Safe and comfortable stroller with adjustable canopy for sun protection. Suitable for newborns to toddlers.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/Stroller.jpg",
+      "original": "/assets/images/products/baby/Stroller.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/Stroller.jpg",
+        "original": "/assets/images/products/baby/Stroller.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/baby/Stroller.jpg",
+        "original": "/assets/images/products/baby/Stroller.jpg"
+      },
+      {
+        "id": 3,
+        "thumbnail": "/assets/images/products/baby/Stroller.jpg",
+        "original": "/assets/images/products/baby/Stroller.jpg"
+      }
+    ],
+    "quantity": 85,
+    "price": 299,
+    "sale_price": 249,
+    "unit": "piece",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Stroller",
+        "slug": "stroller"
+      },
+      {
+        "id": 2,
+        "name": "Newborn",
+        "slug": "newborn"
+      },
+      {
+        "id": 3,
+        "name": "Travel",
+        "slug": "travel"
+      }
+    ]
+  },
+  {
+    "id": "baby2",
+    "name": "Organic Cotton Baby Bodysuits (Pack of 5)",
+    "slug": "organic-cotton-baby-bodysuits",
+    "description": "Soft and breathable 100% organic cotton bodysuits with snap closures for easy diaper changes.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+      "original": "/assets/images/products/baby/baby-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/baby-2-2.jpg",
+        "original": "/assets/images/products/baby-2-2.jpg"
+      }
+    ],
+    "quantity": 120,
+    "price": 35,
+    "unit": "pack",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Clothes",
+        "slug": "clothes"
+      },
+      {
+        "id": 2,
+        "name": "Organic",
+        "slug": "organic"
+      },
+      {
+        "id": 3,
+        "name": "Newborn",
+        "slug": "newborn"
+      }
+    ],
+    "product_type": "variable",
+    "max_price": 45,
+    "min_price": 35,
+    "variations": [
+      {
+        "id": 1,
+        "attribute_id": 1,
+        "value": "White",
+        "attribute": {
+          "id": 1,
+          "slug": "color",
+          "name": "Color",
+          "type": "rectangleColor",
+          "values": [
+            {
+              "id": 1,
+              "attribute_id": 1,
+              "value": "White",
+              "image": "/assets/images/products/baby/baby-2.jpg"
+            },
+            {
+              "id": 2,
+              "attribute_id": 1,
+              "value": "Blue",
+              "image": "/assets/images/products/baby/baby-2.jpg"
+            },
+            {
+              "id": 3,
+              "attribute_id": 1,
+              "value": "Pink",
+              "image": "/assets/images/products/baby/baby-2.jpg"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "attribute_id": 2,
+        "value": "Size",
+        "attribute": {
+          "id": 2,
+          "slug": "size",
+          "name": "Size",
+          "type": "rectangle",
+          "values": [
+            { "id": 1, "attribute_id": 2, "value": "0-3M" },
+            { "id": 2, "attribute_id": 2, "value": "3-6M" },
+            { "id": 3, "attribute_id": 2, "value": "6-12M" }
+          ]
+        }
+      }
+    ],
+    "variation_options": [
+      {
+        "id": 1,
+        "title": "White - 0-3M",
+        "price": 35,
+        "quantity": 40,
+        "sku": "BABY201-WHITE",
+        "is_disable": 0,
+        "image": "/assets/images/products/baby/baby-2.jpg",
+        "options": [
+          { "name": "color", "value": "White" },
+          { "name": "size", "value": "0-3M" }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "White - 3-6M",
+        "price": 35,
+        "quantity": 30,
+        "sku": "BABY202-WHITE",
+        "is_disable": 0,
+        "image": "/assets/images/products/baby/baby-2.jpg",
+        "options": [
+          { "name": "color", "value": "White" },
+          { "name": "size", "value": "3-6M" }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Blue - 0-3M",
+        "price": 38,
+        "quantity": 25,
+        "sku": "BABY201-BLUE",
+        "is_disable": 0,
+        "image": "/assets/images/products/baby/baby-2.jpg",
+        "options": [
+          { "name": "color", "value": "Blue" },
+          { "name": "size", "value": "0-3M" }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Pink - 6-12M",
+        "price": 40,
+        "quantity": 25,
+        "sku": "BABY203-PINK",
+        "is_disable": 0,
+        "image": "/assets/images/products/baby/baby-2.jpg",
+        "options": [
+          { "name": "color", "value": "Pink" },
+          { "name": "size", "value": "6-12M" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "baby3",
+    "name": "Hooded Baby Towel Set (3 Pieces)",
+    "slug": "hooded-baby-towel-set",
+    "description": "Super soft and absorbent hooded towels for babies. Includes 3 towels with cute animal designs.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+      "original": "/assets/images/products/baby/baby-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      }
+    ],
+    "quantity": 65,
+    "price": 28,
+    "sale_price": 22,
+    "unit": "set",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Towels",
+        "slug": "towels"
+      },
+      {
+        "id": 2,
+        "name": "Bath",
+        "slug": "bath"
+      }
+    ]
+  },
+  {
+    "id": "baby4",
+    "name": "Organic Crib Bedding Set",
+    "slug": "organic-crib-bedding-set",
+    "description": "Complete 7-piece crib bedding set made from 100% organic cotton. Includes quilt, sheet, bumper and more.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+      "original": "/assets/images/products/baby/baby-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      }
+    ],
+    "quantity": 42,
+    "price": 129,
+    "unit": "set",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Baby Crib Bedding",
+        "slug": "baby-crib-bedding"
+      },
+      {
+        "id": 2,
+        "name": "Organic",
+        "slug": "organic"
+      }
+    ]
+  },
+  {
+    "id": "baby5",
+    "name": "Orthodontic Pacifiers (2-Pack)",
+    "slug": "orthodontic-pacifiers",
+    "description": "BPA-free orthodontic pacifiers designed for healthy oral development. Includes sterilizing case.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+      "original": "/assets/images/products/baby/baby-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      }
+    ],
+    "quantity": 150,
+    "price": 12,
+    "unit": "pack",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Pacifiers",
+        "slug": "pacifiers"
+      },
+      {
+        "id": 2,
+        "name": "Newborn",
+        "slug": "newborn"
+      }
+    ]
+  },
+  {
+    "id": "baby6",
+    "name": "Convertible Car Seat (0-12 Years)",
+    "slug": "convertible-car-seat",
+    "description": "3-in-1 car seat that grows with your child from rear-facing to forward-facing to booster.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+      "original": "/assets/images/products/baby/baby-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      }
+    ],
+    "quantity": 38,
+    "price": 249,
+    "sale_price": 199,
+    "unit": "piece",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Safety",
+        "slug": "safety"
+      },
+      {
+        "id": 2,
+        "name": "Travel",
+        "slug": "travel"
+      }
+    ]
+  },
+  {
+    "id": "baby7",
+    "name": "Baby Food Maker & Blender",
+    "slug": "baby-food-maker-blender",
+    "description": "All-in-one steamer and blender for making fresh, healthy baby food at home.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+      "original": "/assets/images/products/baby/baby-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      }
+    ],
+    "quantity": 27,
+    "price": 89,
+    "unit": "piece",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Feeding",
+        "slug": "feeding"
+      },
+      {
+        "id": 2,
+        "name": "Healthy",
+        "slug": "healthy"
+      }
+    ]
+  },
+  {
+    "id": "baby8",
+    "name": "Wooden Baby Activity Gym",
+    "slug": "wooden-baby-activity-gym",
+    "description": "Natural wooden play gym with detachable toys to stimulate baby's senses and motor skills.",
+    "image": {
+      "id": 1,
+      "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+      "original": "/assets/images/products/baby/baby-2.jpg"
+    },
+    "gallery": [
+      {
+        "id": 1,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      },
+      {
+        "id": 2,
+        "thumbnail": "/assets/images/products/baby/baby-2.jpg",
+        "original": "/assets/images/products/baby/baby-2.jpg"
+      }
+    ],
+    "quantity": 19,
+    "price": 79,
+    "unit": "piece",
+    "tag": [
+      {
+        "id": 1,
+        "name": "Toys",
+        "slug": "toys"
+      },
+      {
+        "id": 2,
+        "name": "Development",
+        "slug": "development"
+      }
+    ]
+  }
+]

@@ -21,31 +21,27 @@ const ProductCardList: React.FC<ProductProps> = ({product, className,variant = "
     const {outOfStock} = useCartHelpers();
     const statusOutOfStock = outOfStock(id) || quantity < 1;
     return (
-        <article
-            className={cn(
-                'product-list-view  overflow-hidden relative  grid grid-cols-4  p-2 lg:p-4 lg:py-3 gap-4 lg:gap-8 bg-white rounded ',
-                className
-            )}
-        >
-            <div className="col-span-1 relative">
-                <ProductImage product={product} outOfStock={statusOutOfStock} variant={variant} />
-            </div>
-            
-            <div className="col-span-3">
-                <ProductDetails product={product} variant={variant}/>
-               
-                <ProductPricing product={product} variant={variant} />
-                
-                <p className="hidden lg:block text-sm text-skin-base line-clamp-3 leading-7 opacity-80">
-                    {description}
-                </p>
-                
-                <div className="inline-block   lg:mt-6">
-                    <ProductActions product={product}  />
-                </div>
-            </div>
-           
-        </article>
+      <article
+        className={cn(
+          "product-list-view  overflow-hidden relative  grid grid-cols-4  p-2 lg:p-4 lg:py-3 gap-4 lg:gap-8 bg-white rounded ",
+          className
+        )}
+      >
+        <div className="col-span-1 relative">
+          <ProductImage product={product} outOfStock={statusOutOfStock} />
+        </div>
+
+        <div className="col-span-3">
+          <ProductDetails product={product} />
+          <ProductPricing product={product} />
+          <p className="hidden lg:block text-sm text-skin-base line-clamp-3 leading-7 opacity-80">
+            {description}
+          </p>
+          <div className="inline-block   lg:mt-6">
+            <ProductActions product={product} />
+          </div>
+        </div>
+      </article>
     );
 };
 
