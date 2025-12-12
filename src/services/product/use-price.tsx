@@ -61,7 +61,7 @@ export default function usePrice(
 } {
   const { amount, baseAmount } = data ?? {};
   const locale = "en";
-  const currencyCode = "SAR";
+  const currencyCode = "EUR";
 
   const value = useMemo(() => {
     if (typeof amount !== "number") return "";
