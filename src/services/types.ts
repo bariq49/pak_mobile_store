@@ -22,6 +22,7 @@ export type QueryOptionsType = {
   isOnSale?: boolean;
   parent?: string;
   child?: string;
+  brand?: string; // Brand filter for products
 };
 
 // 🆕 ProductsResponse type for products + pagination

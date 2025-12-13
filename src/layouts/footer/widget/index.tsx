@@ -1,5 +1,7 @@
 import WidgetLink from "./widget-link";
 import WidgetAbout from "./widget-about-us";
+import WidgetCategories from "./widget-categories";
+import WidgetBrands from "./widget-brands";
 import Container from "@/components/shared/container";
 import { footerSettings } from "@/data/footer-settings";
 import React from "react";
@@ -27,13 +29,20 @@ const Widgets: React.FC<WidgetsProps> = ({ widgets }) => {
           className="col-span-full sm:col-span-1 md:col-span-3"
         />
 
-        {widgets?.slice(0, 4)?.map((widget) => (
+        {/* Pages Widget (Information) - First */}
+        {widgets?.filter((widget) => widget.id === 1)?.map((widget) => (
           <WidgetLink
             key={`footer-widget--key${widget.id}`}
             data={widget}
             className="col-span-1 md:col-span-2"
           />
         ))}
+
+        {/* Categories Widget - Second */}
+        <WidgetCategories className="col-span-1 md:col-span-2" />
+
+        {/* Brands Widget - Third */}
+        <WidgetBrands className="col-span-1 md:col-span-2" />
       </div>
     </Container>
   );

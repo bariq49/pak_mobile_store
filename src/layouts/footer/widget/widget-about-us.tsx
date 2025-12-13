@@ -29,11 +29,10 @@ const WidgetAbout: React.FC<AboutProps> = ({ social, className }) => {
         />
 
         <div className="mb-3">
-          Address: Acme Widgets 123 Widget Street Acmeville, AC 12345 United
-          States of America
+          Address: Spain
         </div>
-        <div className="mt-4">Phone: (1800)-000-6890</div>
-        <div className="mb-2">Email: sales@emberidge.com</div>
+        <div className="mt-4">Phone: +34607773334</div>
+        <div className="mb-2">Email: pakmobilestore@gmail.com</div>
       </div>
 
       {social && (

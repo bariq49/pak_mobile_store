@@ -2,7 +2,7 @@ export const footerSettings = {
     widgets: [
         {
             id: 1,
-            widgetTitle: 'Information',
+            widgetTitle: 'Pages',
             lists: [
                 {
                     id: 1,
