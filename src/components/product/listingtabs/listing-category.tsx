@@ -22,7 +22,9 @@ const CategoryBlock = ({ parentCat }: { parentCat: any }) => {
   const { data, isLoading: loadingProducts } = useProductsByParentCategory({
     limit: 10,
     parent: parentCat.slug,
-    child: activeTab || "",
+    // Only send child if it exists (for categories with subcategories)
+    // For categories without children, child will be undefined/empty and API should handle it
+    child: activeTab || undefined,
   });
 
   const products = data?.products ?? [];

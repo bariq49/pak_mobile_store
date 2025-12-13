@@ -8,8 +8,14 @@ const getProductsByParentCategory = async (
 ): Promise<ProductsResponse> => {
   const { parent, child, limit = 10 } = options;
 
+  // Build params object, only include child if it's provided and not empty
+  const params: Record<string, any> = { parent, limit };
+  if (child && child.trim() !== "") {
+    params.child = child;
+  }
+
   const { data } = await http.get(API_RESOURCES.PRODUCTS_BY_SUB_CATEGORIES, {
-    params: { parent, child, limit },
+    params,
   });
 
   return {
