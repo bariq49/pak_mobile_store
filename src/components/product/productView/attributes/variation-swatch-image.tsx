@@ -37,12 +37,21 @@ const VariationSwatchImage: React.FC<VariationSwatchImageProps> = ({
                     )}
                     onClick={() => onSelect(variationName, option.value)}
                 >
-                    <Image
-                        src={option.image ?? productPlaceholder}
-                        width={130}
-                        height={130}
-                        alt={option.value || "Product Image"}
-                    />
+                    {option.image && option.image.trim() !== "" ? (
+                        <Image
+                            src={option.image}
+                            width={130}
+                            height={130}
+                            alt={option.value || "Product Image"}
+                        />
+                    ) : (
+                        <Image
+                            src={productPlaceholder}
+                            width={130}
+                            height={130}
+                            alt={option.value || "Product Image"}
+                        />
+                    )}
                     <span className="sr-only">{option.value}</span>
                 </div>
             </Tooltip>

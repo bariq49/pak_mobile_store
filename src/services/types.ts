@@ -103,21 +103,41 @@ export type Review = {
   updatedAt?: string;
 };
 
+// New Variant structure from API
+export interface Variant {
+  _id: string;
+  storage?: string;
+  ram?: string;
+  color?: string;
+  bundle?: string;
+  warranty?: string;
+  price?: number;
+  stock: number;
+  sku: string;
+  image?: string;
+  [key: string]: unknown;
+}
+
 export type Product = {
   id: number | string;
   _id?: string;
   name: string;
+  productName?: string; // Alternative name field from API
   slug: string;
   price: number;
   quantity: number;
   sold: number;
   videoUrl?: string;
   sale_price?: number;
+  salePrice?: number; // Alternative field name
   min_price?: number;
   max_price?: number;
   variation_options: VariationOption[];
   variations?: Variation[];
+  variants?: Variant[]; // New variants array from API
+  product_type?: "simple" | "variable"; // Product type from API
   image?: Attachment;
+  mainImage?: string; // Alternative image field
   sku?: string;
   gallery?: Attachment[];
   category: Category[]; // can be multiple
@@ -134,7 +154,9 @@ export type Product = {
   discountPercentage: number;
   weight: number;
   on_sale?: boolean;
+  onSale?: boolean; // Alternative field name
   in_stock?: boolean;
+  inStock?: boolean; // Alternative field name
   is_active?: boolean;
   deletedAt?: string | null;
   ratingsAverage?: number;
