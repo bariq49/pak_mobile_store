@@ -274,12 +274,12 @@ export const homeThreeHeroCarousel = [
     slug: '/',
     image: {
       mobile: {
-        url: '/assets/images/banner/home3/bannerHeroSlider_1.png',
+        url: '/assets/images/banner/home3/bannerHeroSlider_1.jpg',
         width: 540,
         height: 220,
       },
       desktop: {
-        url: '/assets/images/banner/home3/bannerHeroSlider_1.png',
+        url: '/assets/images/banner/home3/bannerHeroSlider_1.jpg',
         width: 540,
         height: 220,
       },
@@ -291,12 +291,12 @@ export const homeThreeHeroCarousel = [
     slug: '/',
     image: {
       mobile: {
-        url: '/assets/images/banner/home3/bannerHeroSlider_2.png',
+        url: '/assets/images/banner/home3/bannerHeroSlider_2.jpg',
         width: 540,
         height: 220,
       },
       desktop: {
-        url: '/assets/images/banner/home3/bannerHeroSlider_2.png',
+        url: '/assets/images/banner/home3/bannerHeroSlider_2.jpg',
         width: 540,
         height: 220,
       },
