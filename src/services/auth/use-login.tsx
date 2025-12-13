@@ -36,7 +36,7 @@ export const useLoginMutation = (onReset?: () => void) => {
   return useMutation<LoginResponse, any, LoginInputType>({
     mutationFn: loginApi,
     onSuccess: (data) => {
-      Cookies.set("auth_token", data?.data?.token, {
+      Cookies.set("user_token", data?.data?.token, {
         expires: 7,
         secure: true,
         sameSite: "Strict",

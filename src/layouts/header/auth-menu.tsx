@@ -18,7 +18,7 @@ export default function AuthMenu({
   const { isAuthorized } = useUI();
   const { openModal } = useModal();
 
-  const isLoggedIn = isAuthorized ?? !!Cookies.get("auth_token");
+  const isLoggedIn = isAuthorized ?? !!Cookies.get("user_token");
   const handleLogin = useCallback(() => {
     openModal("LOGIN_VIEW");
   }, [openModal]);
