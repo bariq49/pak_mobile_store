@@ -23,7 +23,7 @@ export default function ReviewRatingTabContent({
   useHeading = false,
 }: ReviewRatingTabContentProps) {
   const { isAuthorized } = useUI();
-  const isLoggedIn = isAuthorized ?? !!Cookies.get("auth_token");
+  const isLoggedIn = isAuthorized ?? !!Cookies.get("user_token");
   const { openModal } = useModal();
   const [visibleReviews, setVisibleReviews] = useState(10);
 

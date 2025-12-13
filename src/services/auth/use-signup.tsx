@@ -38,7 +38,7 @@ export const useSignUpMutation = (onReset?: () => void) => {
   return useMutation<SignUpResponse, any, SignUpInputType>({
     mutationFn: signUpApi,
     onSuccess: (data) => {
-      Cookies.set("auth_token", data?.data?.token, {
+      Cookies.set("user_token", data?.data?.token, {
         expires: 7,
         secure: true,
         sameSite: "Strict",

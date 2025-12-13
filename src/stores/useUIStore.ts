@@ -30,7 +30,7 @@ interface UIState {
 
 export const useUIStore = create<UIState>((set, get) => {
     // Sync isAuthorized with cookie
-    const authToken = Cookies.get('auth_token');
+    const authToken = Cookies.get('user_token');
     
     return {
         isAuthorized: !!authToken,

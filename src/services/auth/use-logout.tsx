@@ -28,7 +28,7 @@ export const useLogoutMutation = () => {
   return useMutation<LogoutResponse, Error>({
     mutationFn: logoutApi,
     onSuccess: (data) => {
-      Cookies.remove("auth_token");
+      Cookies.remove("user_token");
       unauthorize();
       queryClient.clear();
       const { resetCart } = useCartStore.getState();

@@ -37,7 +37,7 @@ export const useUpdatePasswordMutation = (onReset?: () => void) => {
   return useMutation<UpdatePasswordResponse, any, UpdatePasswordInputType>({
     mutationFn: updatePasswordApi,
     onSuccess: (res) => {
-      Cookies.set("auth_token", res.data.token, {
+      Cookies.set("user_token", res.data.token, {
         expires: 7,
         secure: true,
         sameSite: "Strict",

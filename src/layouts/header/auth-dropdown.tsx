@@ -24,7 +24,7 @@ export default function AuthDropdown({ hideLabel }: UserDropdownProps) {
   const { isAuthorized } = useUI();
   const { mutate: logout } = useLogoutMutation();
   const { data: currentUser, refetch } = useCurrentUserQuery();
-  const isLoggedIn = isAuthorized ?? !!Cookies.get("auth_token");
+  const isLoggedIn = isAuthorized ?? !!Cookies.get("user_token");
   
   // Check if user has an email - if no email, treat as not logged in
   const hasValidUser = isLoggedIn && currentUser?.email;
