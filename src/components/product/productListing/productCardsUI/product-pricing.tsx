@@ -9,7 +9,7 @@ interface ProductPricingProps {
 }
 
 const ProductPricing: React.FC<ProductPricingProps> = ({ product }) => {
-  const { product_type, sale_price, price, min_price, max_price } = product;
+  const { product_type, sale_price, price, min_price, max_price, variants } = product;
   const { selectedColor } = usePanel();
 
   const { price: displayPrice, basePrice } = usePrice({
@@ -17,12 +17,35 @@ const ProductPricing: React.FC<ProductPricingProps> = ({ product }) => {
     baseAmount: price,
   });
 
+  // Calculate min/max prices from variants if not present or zero
+  let calculatedMinPrice = min_price;
+  let calculatedMaxPrice = max_price;
+
+  if (product_type === "variable" && variants && Array.isArray(variants) && variants.length > 0) {
+    if (!calculatedMinPrice || calculatedMinPrice === 0 || !calculatedMaxPrice || calculatedMaxPrice === 0) {
+      const variantPrices = variants
+        .map((variant: any) => variant.price)
+        .filter((price: number | undefined): price is number => typeof price === 'number' && price > 0);
+      
+      if (variantPrices.length > 0) {
+        calculatedMinPrice = calculatedMinPrice || Math.min(...variantPrices);
+        calculatedMaxPrice = calculatedMaxPrice || Math.max(...variantPrices);
+      }
+    }
+  }
+
+  // Fallback to product price if still no valid prices
+  if ((!calculatedMinPrice || calculatedMinPrice === 0) && (!calculatedMaxPrice || calculatedMaxPrice === 0)) {
+    calculatedMinPrice = price;
+    calculatedMaxPrice = price;
+  }
+
   const { price: minPrice } = usePrice({
-    amount: min_price ?? 0,
+    amount: calculatedMinPrice ?? 0,
   });
 
   const { price: maxPrice } = usePrice({
-    amount: max_price ?? 0,
+    amount: calculatedMaxPrice ?? 0,
   });
 
   return (

@@ -27,6 +27,27 @@ const ProductPricing: React.FC<ProductPricingProps> = ({
   const hasVariations = data.variations && Array.isArray(data.variations) && data.variations.length > 0;
   const hasAnyVariants = hasVariants || hasVariations;
 
+  // Calculate min/max prices from variants if not present on product
+  let minPrice = data.min_price;
+  let maxPrice = data.max_price;
+
+  if (hasVariants && (!minPrice || !maxPrice || minPrice === 0 || maxPrice === 0)) {
+    const variantPrices = data.variants
+      .map((variant: any) => variant.price)
+      .filter((price: number | undefined): price is number => typeof price === 'number' && price > 0);
+    
+    if (variantPrices.length > 0) {
+      minPrice = minPrice || Math.min(...variantPrices);
+      maxPrice = maxPrice || Math.max(...variantPrices);
+    }
+  }
+
+  // Fallback to product price if no variants or variant prices
+  if ((!minPrice || minPrice === 0) && (!maxPrice || maxPrice === 0) && !hasAnyVariants) {
+    minPrice = data.price;
+    maxPrice = data.price;
+  }
+
   return (
     <div className={"pb-3 lg:pb-5"}>
       {!hasAnyVariants ? (
@@ -53,8 +74,8 @@ const ProductPricing: React.FC<ProductPricingProps> = ({
       ) : (
         <VariationPrice
           selectedVariation={selectedVariation}
-          minPrice={data.min_price}
-          maxPrice={data.max_price}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
         />
       )}
     </div>
