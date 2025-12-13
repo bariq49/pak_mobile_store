@@ -17,13 +17,24 @@ function useProductVariations(
   const hasNewVariants = product?.variants && Array.isArray(product.variants) && product.variants.length > 0;
   const hasOldVariations = product?.variations && Array.isArray(product.variations) && product.variations.length > 0;
 
+  // Get product main image as fallback for variants
+  const productMainImage = useMemo(() => {
+    if (product?.image && typeof product.image === "object") {
+      return (product.image as any).thumbnail || (product.image as any).original || "";
+    }
+    if (product?.mainImage && typeof product.mainImage === "string") {
+      return product.mainImage;
+    }
+    return "";
+  }, [product?.image, product?.mainImage]);
+
   // Convert new variants structure to old format if needed
   const convertedData = useMemo(() => {
     if (hasNewVariants) {
-      return convertVariantsToVariations(product.variants || []);
+      return convertVariantsToVariations(product.variants || [], productMainImage);
     }
     return { variations: [], variationOptions: [] };
-  }, [hasNewVariants, product?.variants]);
+  }, [hasNewVariants, product?.variants, productMainImage]);
 
   // Merge converted variations with existing variations
   const allVariations = useMemo(() => {
@@ -70,11 +81,11 @@ function useProductVariations(
   const variations = useMemo(() => {
     if (hasNewVariants) {
       // Convert new variants to VariationsType format
-      return convertVariantsToVariationsType(product.variants || []);
+      return convertVariantsToVariationsType(product.variants || [], productMainImage);
     }
     // Use old format
     return getVariations(allVariations);
-  }, [hasNewVariants, product?.variants, allVariations]);
+  }, [hasNewVariants, product?.variants, productMainImage, allVariations]);
 
   // Store selected variation
   const [errorAttributes, setErrorAttributes] = useState<boolean>(false);
