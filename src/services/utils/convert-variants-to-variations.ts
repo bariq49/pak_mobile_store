@@ -13,6 +13,9 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
     return { variations: [], variationOptions: [] };
   }
 
+  // Debug: Log variants to see what we're working with
+  console.log("Converting variants to variations:", variants);
+
   // Extract unique attribute values
   const attributeMap: {
     [key: string]: {
@@ -21,20 +24,24 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
     };
   } = {};
 
-  variants.forEach((variant) => {
-    // Helper to check if image is valid
-    const isValidImage = (img: string | undefined): boolean => {
-      return !!(img && typeof img === "string" && img.trim() !== "");
-    };
+  // Helper to check if image is valid
+  const isValidImage = (img: string | undefined): boolean => {
+    return !!(img && typeof img === "string" && img.trim() !== "");
+  };
 
+  variants.forEach((variant) => {
     // Storage
     if (variant.storage) {
       if (!attributeMap.storage) {
         attributeMap.storage = { values: new Set(), images: new Map() };
       }
       attributeMap.storage.values.add(variant.storage);
+      // Set image if valid and not already set, or if current variant has fewer attributes (better match)
       if (isValidImage(variant.image)) {
-        attributeMap.storage.images.set(variant.storage, variant.image!);
+        const existingImage = attributeMap.storage.images.get(variant.storage);
+        if (!existingImage || (!variant.ram && !variant.color)) {
+          attributeMap.storage.images.set(variant.storage, variant.image!);
+        }
       }
     }
 
@@ -44,19 +51,29 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
         attributeMap.ram = { values: new Set(), images: new Map() };
       }
       attributeMap.ram.values.add(variant.ram);
+      // Set image if valid and not already set, or if current variant has fewer attributes
       if (isValidImage(variant.image)) {
-        attributeMap.ram.images.set(variant.ram, variant.image!);
+        const existingImage = attributeMap.ram.images.get(variant.ram);
+        if (!existingImage || (!variant.storage && !variant.color)) {
+          attributeMap.ram.images.set(variant.ram, variant.image!);
+        }
       }
     }
 
-    // Color
+    // Color - prioritize images for color swatches
     if (variant.color) {
       if (!attributeMap.color) {
         attributeMap.color = { values: new Set(), images: new Map() };
       }
       attributeMap.color.values.add(variant.color);
+      // For color, always use the image if available (color swatches need images)
       if (isValidImage(variant.image)) {
-        attributeMap.color.images.set(variant.color, variant.image!);
+        // If image already exists, only replace if current variant has a better match
+        // (e.g., if we find a variant with only color selected, prefer that)
+        const existingImage = attributeMap.color.images.get(variant.color);
+        if (!existingImage || (!variant.storage && !variant.ram)) {
+          attributeMap.color.images.set(variant.color, variant.image!);
+        }
       }
     }
 
@@ -94,6 +111,9 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
     const values = Array.from(attrData.values);
     const attributeType = getAttributeType(attrName);
 
+    // Debug: Log images for this attribute
+    console.log(`Attribute ${attrName} images:`, Array.from(attrData.images.entries()));
+
     variations.push({
       id: attributeIdCounter++,
       attribute_id: attributeIdCounter - 1,
@@ -106,12 +126,20 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
         type: attributeType,
         values: values.map((value, index) => {
           const image = attrData.images.get(value);
+          // Ensure image is a valid URL string
+          const imageUrl = image && typeof image === "string" && image.trim() !== "" 
+            ? image.trim() 
+            : undefined;
+          
+          // Debug: Log each value and its image
+          console.log(`  Value "${value}" for ${attrName}: image =`, imageUrl);
+          
           return {
             _id: valueIdCounter++,
             id: valueIdCounter - 1,
             attribute_id: attributeIdCounter - 1,
             value: value,
-            image: image && image.trim() !== "" ? image : undefined,
+            image: imageUrl,
           };
         }),
       },
@@ -182,12 +210,18 @@ export function convertVariantsToVariationsType(variants: Variant[] = []): Varia
     const slug = variation.attribute.slug;
     variationsType[slug] = {
       type: variation.attribute.type,
-      options: variation.attribute.values.map((val) => ({
-        id: val.id,
-        attribute_id: val.attribute_id,
-        value: val.value,
-        image: val.image && val.image.trim() !== "" ? val.image : "",
-      })),
+      options: variation.attribute.values.map((val) => {
+        // Ensure image is properly formatted
+        const imageUrl = val.image && typeof val.image === "string" && val.image.trim() !== ""
+          ? val.image.trim()
+          : "";
+        return {
+          id: val.id,
+          attribute_id: val.attribute_id,
+          value: val.value,
+          image: imageUrl,
+        };
+      }),
     };
   });
 

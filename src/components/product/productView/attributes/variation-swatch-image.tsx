@@ -17,7 +17,15 @@ const VariationSwatchImage: React.FC<VariationSwatchImageProps> = ({
                                                                        options,
                                                                        selectedValue,
                                                                        onSelect,
-                                                                   }) => (
+                                                                   }) => {
+    // Debug: Log options to see what images we have
+    console.log(`VariationSwatchImage for ${variationName}:`, options.map(opt => ({
+        value: opt.value,
+        image: opt.image,
+        hasImage: opt.image && opt.image.trim() !== ""
+    })));
+
+    return (
     <div className="flex flex-wrap gap-3">
         {options.map((option) => (
             <Tooltip
@@ -57,6 +65,7 @@ const VariationSwatchImage: React.FC<VariationSwatchImageProps> = ({
             </Tooltip>
         ))}
     </div>
-);
+    );
+};
 
 export default VariationSwatchImage;
