@@ -9,7 +9,7 @@ export const siteSettings = {
     address: "",
   },
   logo: {
-    url: "/assets/images/logo/pakmobilelogo.png",
+    url: "/assets/images/logo/pakmobilelogofinal.png",
     alt: "Emberidge",
     href: "/",
     width: 195,
