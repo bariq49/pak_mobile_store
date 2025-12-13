@@ -17,7 +17,15 @@ const VariationSwatchImage: React.FC<VariationSwatchImageProps> = ({
                                                                        options,
                                                                        selectedValue,
                                                                        onSelect,
-                                                                   }) => (
+                                                                   }) => {
+    // Debug: Log options to see what images we have
+    console.log(`VariationSwatchImage for ${variationName}:`, options.map(opt => ({
+        value: opt.value,
+        image: opt.image,
+        hasImage: opt.image && opt.image.trim() !== ""
+    })));
+
+    return (
     <div className="flex flex-wrap gap-3">
         {options.map((option) => (
             <Tooltip
@@ -37,17 +45,27 @@ const VariationSwatchImage: React.FC<VariationSwatchImageProps> = ({
                     )}
                     onClick={() => onSelect(variationName, option.value)}
                 >
-                    <Image
-                        src={option.image ?? productPlaceholder}
-                        width={130}
-                        height={130}
-                        alt={option.value || "Product Image"}
-                    />
+                    {option.image && option.image.trim() !== "" ? (
+                        <Image
+                            src={option.image}
+                            width={130}
+                            height={130}
+                            alt={option.value || "Product Image"}
+                        />
+                    ) : (
+                        <Image
+                            src={productPlaceholder}
+                            width={130}
+                            height={130}
+                            alt={option.value || "Product Image"}
+                        />
+                    )}
                     <span className="sr-only">{option.value}</span>
                 </div>
             </Tooltip>
         ))}
     </div>
-);
+    );
+};
 
 export default VariationSwatchImage;

@@ -1,6 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import cn from "classnames";
 import React from "react";
+import { productPlaceholder } from "@/assets/placeholders";
 
 interface Props {
   variant?: string;
@@ -28,6 +29,14 @@ const ImageFill: React.FC<Props> = ({
   // Automatically set priority for eager loading
   const effectivePriority = loading === "eager" ? true : priority;
 
+  // Validate src - don't render if empty string, use placeholder instead
+  const isValidSrc = 
+    (typeof src === "string" && src.trim() !== "") || 
+    (typeof src === "object" && src !== null);
+  
+  // Use placeholder if src is invalid
+  const imageSrc = isValidSrc ? src : productPlaceholder;
+
   return (
     <div className={cn("relative md:inline-block ", rootClassName)}>
       <div className={cn("block w-full box-sizing")}>
@@ -40,7 +49,7 @@ const ImageFill: React.FC<Props> = ({
         />
       </div>
       <Image
-        src={src}
+        src={imageSrc}
         alt={alt}
         width={0}
         height={0}

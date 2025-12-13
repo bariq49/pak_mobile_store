@@ -3,6 +3,10 @@ import cn from "classnames";
 import { VariationsType } from "@/services/types";
 import VariationRectangle from "@/components/product/productView/attributes/variation-rectangle";
 import VariationRectangleColor from "@/components/product/productView/attributes/variation-rectangle-color";
+import VariationSwatch from "@/components/product/productView/attributes/variation-swatch";
+import VariationSwatchImage from "@/components/product/productView/attributes/variation-swatch-image";
+import VariationRadio from "@/components/product/productView/attributes/variation-radio";
+import VariationDropdown from "@/components/product/productView/attributes/variation-dropdown";
 import VariationError from "@/components/product/productView/attributes/variation-error";
 import useProductAttributes from "@/hooks/use-product-attributes";
 
@@ -58,6 +62,38 @@ const ProductAttributes: React.FC<Props> = ({
           )}
           {variation.type === "rectangleColor" && (
             <VariationRectangleColor
+              variationName={variationName}
+              options={variation.options}
+              selectedValue={attributes[variationName]}
+              onSelect={handleSelect}
+            />
+          )}
+          {variation.type === "swatch" && (
+            <VariationSwatch
+              variationName={variationName}
+              options={variation.options}
+              selectedValue={attributes[variationName]}
+              onSelect={handleSelect}
+            />
+          )}
+          {variation.type === "swatchImage" && (
+            <VariationSwatchImage
+              variationName={variationName}
+              options={variation.options}
+              selectedValue={attributes[variationName]}
+              onSelect={handleSelect}
+            />
+          )}
+          {variation.type === "radio" && (
+            <VariationRadio
+              variationName={variationName}
+              options={variation.options}
+              selectedValue={attributes[variationName]}
+              onSelect={handleSelect}
+            />
+          )}
+          {variation.type === "dropdown" && (
+            <VariationDropdown
               variationName={variationName}
               options={variation.options}
               selectedValue={attributes[variationName]}

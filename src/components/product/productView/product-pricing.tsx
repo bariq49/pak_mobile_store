@@ -17,15 +17,19 @@ const ProductPricing: React.FC<ProductPricingProps> = ({
   selectedVariation,
 }) => {
   const { price, basePrice, discount } = usePrice({
-    amount: data.sale_price ? data.sale_price : data.price,
+    amount: data.sale_price || data.salePrice ? (data.sale_price || data.salePrice) : data.price,
     baseAmount: data.price,
   });
   const { selectedColor } = usePanel();
-  const variations = data.variations;
+  
+  // Check for variants (new structure) or variations (old structure)
+  const hasVariants = data.variants && Array.isArray(data.variants) && data.variants.length > 0;
+  const hasVariations = data.variations && Array.isArray(data.variations) && data.variations.length > 0;
+  const hasAnyVariants = hasVariants || hasVariations;
 
   return (
     <div className={"pb-3 lg:pb-5"}>
-      {isEmpty(variations) ? (
+      {!hasAnyVariants ? (
         <div className="flex items-center mt-5">
           <div
             className={cn(
