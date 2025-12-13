@@ -5,7 +5,10 @@ import { Variant, Variation, VariationsType, VariationOption } from "@/services/
  * Convert variants array to variations format for UI compatibility
  * This allows the existing UI components to work with the new variant structure
  */
-export function convertVariantsToVariations(variants: Variant[] = []): {
+export function convertVariantsToVariations(
+  variants: Variant[] = [],
+  productImage?: string // Optional product main image as fallback
+): {
   variations: Variation[];
   variationOptions: VariationOption[];
 } {
@@ -15,6 +18,12 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
 
   // Debug: Log variants to see what we're working with
   console.log("Converting variants to variations:", variants);
+  console.log("Sample variant structure:", variants[0]);
+  console.log("Variant images check:", variants.map(v => ({
+    color: v.color,
+    image: v.image,
+    hasImage: !!(v.image && typeof v.image === "string" && v.image.trim() !== "")
+  })));
 
   // Extract unique attribute values
   const attributeMap: {
@@ -24,7 +33,25 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
     };
   } = {};
 
-  // Helper to check if image is valid
+  // Helper to check if image is valid and extract from variant
+  const getVariantImage = (variant: Variant): string | undefined => {
+    // Try multiple possible field names for image
+    const image = variant.image || 
+                  (variant as any).imageUrl || 
+                  (variant as any).thumbnail || 
+                  (variant as any).image_url ||
+                  (variant as any).img;
+    
+    if (image && typeof image === "string" && image.trim() !== "") {
+      return image.trim();
+    }
+    // Fallback to product image if variant doesn't have its own image
+    if (productImage && typeof productImage === "string" && productImage.trim() !== "") {
+      return productImage.trim();
+    }
+    return undefined;
+  };
+
   const isValidImage = (img: string | undefined): boolean => {
     return !!(img && typeof img === "string" && img.trim() !== "");
   };
@@ -37,10 +64,11 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
       }
       attributeMap.storage.values.add(variant.storage);
       // Set image if valid and not already set, or if current variant has fewer attributes (better match)
-      if (isValidImage(variant.image)) {
+      const storageImage = getVariantImage(variant);
+      if (isValidImage(storageImage)) {
         const existingImage = attributeMap.storage.images.get(variant.storage);
         if (!existingImage || (!variant.ram && !variant.color)) {
-          attributeMap.storage.images.set(variant.storage, variant.image!);
+          attributeMap.storage.images.set(variant.storage, storageImage!);
         }
       }
     }
@@ -52,10 +80,11 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
       }
       attributeMap.ram.values.add(variant.ram);
       // Set image if valid and not already set, or if current variant has fewer attributes
-      if (isValidImage(variant.image)) {
+      const ramImage = getVariantImage(variant);
+      if (isValidImage(ramImage)) {
         const existingImage = attributeMap.ram.images.get(variant.ram);
         if (!existingImage || (!variant.storage && !variant.color)) {
-          attributeMap.ram.images.set(variant.ram, variant.image!);
+          attributeMap.ram.images.set(variant.ram, ramImage!);
         }
       }
     }
@@ -67,13 +96,18 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
       }
       attributeMap.color.values.add(variant.color);
       // For color, always use the image if available (color swatches need images)
-      if (isValidImage(variant.image)) {
-        // If image already exists, only replace if current variant has a better match
-        // (e.g., if we find a variant with only color selected, prefer that)
-        const existingImage = attributeMap.color.images.get(variant.color);
-        if (!existingImage || (!variant.storage && !variant.ram)) {
-          attributeMap.color.images.set(variant.color, variant.image!);
-        }
+      // Always set image for color if it exists, even if one already exists
+      // (we want to ensure colors have images for swatch display)
+      const colorImage = getVariantImage(variant);
+      if (isValidImage(colorImage)) {
+        attributeMap.color.images.set(variant.color, colorImage!);
+        console.log(`Setting image for color "${variant.color}":`, colorImage);
+      } else {
+        console.log(`No valid image for color "${variant.color}"`, {
+          variantImage: variant.image,
+          variantKeys: Object.keys(variant),
+          fullVariant: variant
+        });
       }
     }
 
@@ -198,12 +232,15 @@ export function convertVariantsToVariations(variants: Variant[] = []): {
 /**
  * Convert variants to VariationsType format (for UI components)
  */
-export function convertVariantsToVariationsType(variants: Variant[] = []): VariationsType {
+export function convertVariantsToVariationsType(
+  variants: Variant[] = [],
+  productImage?: string
+): VariationsType {
   if (!variants || variants.length === 0) {
     return {};
   }
 
-  const { variations } = convertVariantsToVariations(variants);
+  const { variations } = convertVariantsToVariations(variants, productImage);
   const variationsType: VariationsType = {};
 
   variations.forEach((variation) => {
