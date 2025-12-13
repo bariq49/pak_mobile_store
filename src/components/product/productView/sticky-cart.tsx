@@ -26,11 +26,35 @@ const StickyCart: React.FC<Props> = ({ product, addToCartLoader, handleAddToCart
       amount: product?.sale_price ?? product?.price ?? 0,
       baseAmount: product?.price ?? undefined,
     });
+
+    // Calculate min/max prices from variants if not present or zero
+    let calculatedMinPrice = product?.min_price;
+    let calculatedMaxPrice = product?.max_price;
+
+    if (product?.product_type === 'variable' && product?.variants && Array.isArray(product.variants) && product.variants.length > 0) {
+      if (!calculatedMinPrice || calculatedMinPrice === 0 || !calculatedMaxPrice || calculatedMaxPrice === 0) {
+        const variantPrices = product.variants
+          .map((variant: any) => variant.price)
+          .filter((price: number | undefined): price is number => typeof price === 'number' && price > 0);
+        
+        if (variantPrices.length > 0) {
+          calculatedMinPrice = calculatedMinPrice || Math.min(...variantPrices);
+          calculatedMaxPrice = calculatedMaxPrice || Math.max(...variantPrices);
+        }
+      }
+    }
+
+    // Fallback to product price if still no valid prices
+    if ((!calculatedMinPrice || calculatedMinPrice === 0) && (!calculatedMaxPrice || calculatedMaxPrice === 0)) {
+      calculatedMinPrice = product?.price;
+      calculatedMaxPrice = product?.price;
+    }
+
     const { price: minPrice } = usePrice({
-      amount: product?.min_price ?? 0,
+      amount: calculatedMinPrice ?? 0,
     });
     const { price: maxPrice } = usePrice({
-      amount: product?.max_price ?? 0,
+      amount: calculatedMaxPrice ?? 0,
     });
     
     const { selectedColor } = usePanel();
