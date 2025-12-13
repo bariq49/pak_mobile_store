@@ -25,6 +25,9 @@ export default function AuthDropdown({ hideLabel }: UserDropdownProps) {
   const { mutate: logout } = useLogoutMutation();
   const { data: currentUser, refetch } = useCurrentUserQuery();
   const isLoggedIn = isAuthorized ?? !!Cookies.get("auth_token");
+  
+  // Check if user has an email - if no email, treat as not logged in
+  const hasValidUser = isLoggedIn && currentUser?.email;
 
   const handleLogout = useCallback(() => {
     logout();
@@ -35,7 +38,7 @@ export default function AuthDropdown({ hideLabel }: UserDropdownProps) {
     openModal("LOGIN_VIEW");
   }, [openModal]);
 
-  if (!isLoggedIn) {
+  if (!hasValidUser) {
     return (
       <button
         className={cn(
