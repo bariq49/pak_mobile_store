@@ -29,7 +29,7 @@ export function OrderSummary({
   const { price: formattedShipping } = usePrice({ amount: shippingFee });
   const { price: formattedTotal } = usePrice({ amount: total });
   const { price: formattedCOD } = usePrice({ amount: codFee });
-  console.log("paymentMethod", paymentMethod);
+
   return (
     <div className="p-5 md:p-8 bg-white rounded-lg border border-border-base">
       <h2 className="text-lg font-semibold text-brand-dark mb-5">

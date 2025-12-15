@@ -85,9 +85,10 @@ const generateFinalState = (
   const totalUniqueItems = calculateUniqueItems(items);
   const total = calculateTotal(items);
   const final = finalTotal ?? total - discount + shippingFee + codFee;
+  const calculatedItems = calculateItemTotals(items);
 
   return {
-    items: calculateItemTotals(items),
+    items: calculatedItems,
     totalItems: calculateTotalItems(items),
     totalUniqueItems,
     total,

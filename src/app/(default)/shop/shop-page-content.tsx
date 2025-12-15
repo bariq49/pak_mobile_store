@@ -19,7 +19,6 @@ export default function ShopPageContent() {
 
   const { isFetching, isFetchingNextPage, fetchNextPage, hasNextPage, data } =
     useShopProductsQuery(LIMITS.PRODUCTS_LIMITS, queryParams);
-    console.log("data", data);
 
   return (
     <Element name="category" className="flex products-category">

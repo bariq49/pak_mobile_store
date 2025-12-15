@@ -168,6 +168,8 @@ export type Product = {
   additional_info?: AdditionalInfo[];
   createdAt?: string;
   updatedAt?: string;
+  /** Optional tax percentage from backend, e.g. 2, 4, 21 */
+  tax?: number | null;
   [key: string]: unknown;
 };
 
@@ -237,6 +239,8 @@ export interface VariationOption {
   image: Attachment;
   sku: string;
   options: Option[];
+  /** Optional tax percentage from backend, e.g. 2, 4, 21 */
+  tax?: number | null;
 }
 
 export type OrderItem = {

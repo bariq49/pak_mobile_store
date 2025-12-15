@@ -8,6 +8,10 @@ import { CheckoutItem } from "@/components/checkout/checkout-card-item";
 import { Loader, Trash2 } from "lucide-react";
 import usePrice from "@/services/product/use-price";
 import Input from "@/components/shared/form/input";
+import {
+  calculateSubtotalWithoutTax,
+  calculateTaxTotal,
+} from "@/services/utils/cartUtils";
 
 const CheckoutCard: React.FC = () => {
   const {
@@ -29,11 +33,32 @@ const CheckoutCard: React.FC = () => {
   const { applyCoupon, removeCoupon, isApplyingCoupon, isRemovingCoupon } =
     useCartActions();
 
-  const { price: formattedSubtotal } = usePrice({ amount: total });
+  // Derive subtotal (without tax) and total tax from cart items
+  const subtotalWithoutTax = calculateSubtotalWithoutTax(items);
+  const taxTotal = calculateTaxTotal(items);
+
+  const { price: formattedSubtotal } = usePrice({ amount: subtotalWithoutTax });
   const { price: formattedDiscount } = usePrice({ amount: discount });
   const { price: formattedShipping } = usePrice({ amount: shippingFee });
   const { price: formattedCOD } = usePrice({ amount: codFee });
   const { price: formattedTotal } = usePrice({ amount: finalTotal });
+  const { price: formattedTaxTotal } = usePrice({ amount: taxTotal });
+
+  // Derive tax label like "Tax (4%)" when there is a single tax rate across items
+  const distinctTaxRates = Array.from(
+    new Set(
+      items
+        .map((item) =>
+          typeof item.tax === "number" && item.tax > 0 ? item.tax : null
+        )
+        .filter((v): v is number => v !== null)
+    )
+  );
+  const taxLabel =
+    taxTotal > 0 && distinctTaxRates.length === 1
+      ? `Tax (${distinctTaxRates[0]}%)`
+      : "Tax";
+
 
   const handleApply = () => {
     if (couponCode.trim() && !coupon) {
@@ -135,6 +160,22 @@ const CheckoutCard: React.FC = () => {
               <span>Subtotal</span>
               <span>{formattedSubtotal}</span>
             </div>
+
+            {/* Show tax line - will be hidden if taxTotal is 0 */}
+            {taxTotal > 0 ? (
+              <div className="flex justify-between text-brand-dark text-sm">
+                <span>{taxLabel}</span>
+                <span>{formattedTaxTotal}</span>
+              </div>
+            ) : (
+              // Debug: Show when taxTotal is 0 to verify calculation
+              process.env.NODE_ENV === "development" && (
+                <div className="flex justify-between text-gray-400 text-xs italic">
+                  <span>Tax (debug: {taxTotal})</span>
+                  <span>No tax applied</span>
+                </div>
+              )
+            )}
 
             {discount > 0 && (
               <div className="flex justify-between text-green-600 font-medium">

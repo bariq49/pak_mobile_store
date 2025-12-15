@@ -38,8 +38,6 @@ const WidgetSignup: React.FC<Props> = ({ className }) => {
     setTimeout(() => {
       setSubscriptionSuccess(false);
     }, 5000);
-
-    console.log(values, "News letter");
   }
 
   const { selectedColor, selectedDirection } = usePanel();

@@ -41,7 +41,7 @@ const BestDealsFeed: React.FC<ProductFeedProps> = ({
   const { data, isLoading } = usePopularProductsQuery({
     limit: limit,
   });
-console.log("deals data", data);
+
   return (
     <div className={`mb-8 lg:mb-10  ${className}`}>
       <SectionHeader

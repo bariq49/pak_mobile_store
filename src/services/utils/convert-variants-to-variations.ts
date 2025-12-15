@@ -16,14 +16,6 @@ export function convertVariantsToVariations(
     return { variations: [], variationOptions: [] };
   }
 
-  // Debug: Log variants to see what we're working with
-  console.log("Converting variants to variations:", variants);
-  console.log("Sample variant structure:", variants[0]);
-  console.log("Variant images check:", variants.map(v => ({
-    color: v.color,
-    image: v.image,
-    hasImage: !!(v.image && typeof v.image === "string" && v.image.trim() !== "")
-  })));
 
   // Extract unique attribute values
   const attributeMap: {
@@ -101,13 +93,6 @@ export function convertVariantsToVariations(
       const colorImage = getVariantImage(variant);
       if (isValidImage(colorImage)) {
         attributeMap.color.images.set(variant.color, colorImage!);
-        console.log(`Setting image for color "${variant.color}":`, colorImage);
-      } else {
-        console.log(`No valid image for color "${variant.color}"`, {
-          variantImage: variant.image,
-          variantKeys: Object.keys(variant),
-          fullVariant: variant
-        });
       }
     }
 
@@ -145,8 +130,6 @@ export function convertVariantsToVariations(
     const values = Array.from(attrData.values);
     const attributeType = getAttributeType(attrName);
 
-    // Debug: Log images for this attribute
-    console.log(`Attribute ${attrName} images:`, Array.from(attrData.images.entries()));
 
     variations.push({
       id: attributeIdCounter++,
@@ -164,9 +147,6 @@ export function convertVariantsToVariations(
           const imageUrl = image && typeof image === "string" && image.trim() !== "" 
             ? image.trim() 
             : undefined;
-          
-          // Debug: Log each value and its image
-          console.log(`  Value "${value}" for ${attrName}: image =`, imageUrl);
           
           return {
             _id: valueIdCounter++,

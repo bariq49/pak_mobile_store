@@ -22,7 +22,7 @@ const ContactForm: React.FC = () => {
   } = useForm<ContactFormValues>();
 
   function onSubmit(values: ContactFormValues) {
-    console.log(values, 'Contact');
+    // Handle form submission
   }
 
 

@@ -1,5 +1,5 @@
 'use client';
-import {Item} from "@/services/utils/cartUtils";
+import { Item } from "@/services/utils/cartUtils";
 import Image from '@/components/shared/image';
 import usePrice from '@/services/product/use-price';
 import React from "react";
@@ -7,8 +7,10 @@ import { productPlaceholder } from "@/assets/placeholders";
 
 export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
   const { price } = usePrice({
-    amount: item.itemTotal,
+    amount: item.itemTotal ?? item.price * (item.quantity ?? 1),
   });
+
+  const hasTax = typeof item.tax === "number" && item.tax > 0;
 
   return (
     <div className="flex items-center">
@@ -21,9 +23,16 @@ export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
           height={64}
         />
       </div>
-      <h6 className="font-normal text-15px text-brand-dark ltr:pl-3 rtl:pr-3">
-        <span className="font-medium">{item.quantity} x </span> {item.name}
-      </h6>
+      <div className="flex flex-col ltr:pl-3 rtl:pr-3 flex-1">
+        <h6 className="font-normal text-15px text-brand-dark">
+          <span className="font-medium">{item.quantity} x </span> {item.name}
+        </h6>
+        {hasTax && (
+          <span className="text-xs text-gray-500">
+            Includes {item.tax}% tax
+          </span>
+        )}
+      </div>
       <div className="w-24 text-end font-semibold ltr:ml-auto rtl:mr-auto text-15px text-brand-dark ltr:pl-2 rtl:pr-2 shrink-0">
         {price}
       </div>

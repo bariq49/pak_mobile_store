@@ -9,7 +9,7 @@ export const siteSettings = {
     address: "",
   },
   logo: {
-    url: "/assets/images/logo/pakmobilelogo.png",
+    url: "/assets/images/logo/logo.png",
     alt: "PakMobileStore",
     href: "/",
     width: 195,

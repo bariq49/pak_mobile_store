@@ -30,8 +30,9 @@ const ProductHeader: React.FC<ProductHeaderProps> = ({ data }) => {
 
             return (
               <div key={idx} className="relative inline-block mx-px">
+                {/* Base (unfilled) star with darker stroke so empty stars are clearer */}
                 <Star
-                  stroke="#DFE6ED"
+                  stroke="#9CA3AF"
                   fill="white"
                   size={16}
                   className="relative"

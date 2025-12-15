@@ -37,9 +37,7 @@ const ProductAttributes: React.FC<Props> = ({
       [variationName]: value,
     }));
   };
-  console.log("variations", variations);
-  console.log("attributes", attributes);
-  console.log("error", error);
+
   return (
     <>
       {Object.entries(variations).map(([variationName, variation], index) => (

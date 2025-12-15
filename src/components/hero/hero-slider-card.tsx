@@ -32,7 +32,7 @@ export default function HeroSliderCard({ banner }: BannerProps) {
 
   return (
     <div
-      className="relative w-full overflow-hidden rounded-2xl min-h-[380px] md:min-h-[480px] lg:min-h-[550px] flex items-center"
+      className="relative w-full overflow-hidden rounded-2xl min-h-[380px] md:min-h-[300px] 2xl:min-h-[457px] flex items-center"
       style={{
         backgroundImage: `url('${selectedImage.url}')`,
         backgroundPosition: "center",

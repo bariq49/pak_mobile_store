@@ -30,8 +30,6 @@ export default function PageContent() {
 
   const products = data?.pages.flatMap((page) => page.data) ?? [];
 
-  console.log("Flattened products:", products);
-
   return (
     <Element name="category" className="flex products-category">
       {/* Sidebar Filters */}
