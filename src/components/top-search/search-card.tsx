@@ -6,6 +6,7 @@ import usePrice from "@/services/product/use-price";
 import { usePanel } from "@/hooks/use-panel";
 import { colorMap } from "@/data/color-settings";
 import cn from "classnames";
+import StarIcon from "@/components/icons/star-icon";
 
 type SearchProductProps = {
   product: any;
@@ -47,8 +48,15 @@ const SearchCard: React.FC<SearchProductProps> = ({ product }) => {
   const { price: maxPrice } = usePrice({
     amount: calculatedMaxPrice ?? 0,
   });
-  
+
   const { selectedColor } = usePanel();
+
+  const rating =
+    typeof product?.ratingsAverage === "number" ? product.ratingsAverage : 0;
+  const reviewCount =
+    typeof product?.ratingsQuantity === "number"
+      ? product.ratingsQuantity
+      : 0;
 
   return (
     <Link
@@ -66,10 +74,39 @@ const SearchCard: React.FC<SearchProductProps> = ({ product }) => {
       </div>
 
       <div className="flex flex-col w-full overflow-hidden">
-        <h3 className="truncate text-brand-dark text-15px  mb-1.5">{name}</h3>
-        <div className="space-x-2 ">
-          <span className={cn("inline-block font-semibold text-sm sm:text-15px lg:text-base ",colorMap[selectedColor].text)}>
-            {product_type === 'variable' ? `${minPrice} - ${maxPrice}` : price}
+        <h3 className="truncate text-brand-dark text-15px mb-1.5">{name}</h3>
+
+        {rating > 0 && (
+          <div className="flex items-center gap-1 mb-1">
+            <div className="flex items-center gap-[2px]">
+              {[...Array(5)].map((_, idx) => {
+                const starValue = idx + 1;
+                const isActive = starValue <= Math.round(rating);
+                return (
+                  <StarIcon
+                    key={idx}
+                    color={isActive ? "#F59E0B" : "#E5E7EB"}
+                    strokeColor={isActive ? "#EA580C" : "#9CA3AF"}
+                    strokeWidth={1.4}
+                    className="w-3 h-3"
+                  />
+                );
+              })}
+            </div>
+            <span className="text-[11px] text-gray-600">
+              {rating.toFixed(1)} ({reviewCount})
+            </span>
+          </div>
+        )}
+
+        <div className="space-x-2">
+          <span
+            className={cn(
+              "inline-block font-semibold text-sm sm:text-15px lg:text-base",
+              colorMap[selectedColor].text
+            )}
+          >
+            {product_type === "variable" ? `${minPrice} - ${maxPrice}` : price}
           </span>
           {basePrice && (
             <del className="text-sm text-brand-dark text-opacity-70">

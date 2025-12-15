@@ -15,7 +15,6 @@ const VariationRectangle: React.FC<VariationRectangleProps> = ({
   selectedValue,
   onSelect,
 }) => {
-  console.log("options", options);
   return (
     <div className="flex flex-wrap gap-3">
       {options.map((option, index) => (

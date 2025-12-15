@@ -37,10 +37,8 @@ const getShopProducts = async ({
   const { data } = await http.get<ProductsResponse>(
     `${API_RESOURCES.PRODUCTS}?${params.toString()}`
   );
-  console.log("data resposnse", data);
   // Extract data from the API response structure
   const products = data.data.products || [];
-  console.log("products", products);
   const pagination = data.data.pagination || {
     total: 0,
     page: 1,

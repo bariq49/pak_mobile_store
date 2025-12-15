@@ -4,7 +4,7 @@ import { useCartStore } from "@/stores/useCartStore";
 import type { CartState } from "@/stores/useCartStore";
 import { Product, VariationOption } from "@/services/types";
 import { constructCartItem } from "@/utils/construct-cart-item";
-import { Item } from "@/services/utils/cartUtils";
+import { Item, convertTaxToNumber } from "@/services/utils/cartUtils";
 import {
   useCartQuery,
   useAddToCart,
@@ -14,6 +14,7 @@ import {
   useApplyCoupon,
   useRemoveCoupon,
 } from "@/services/cart/cart-api";
+import { useCurrentUserQuery } from "@/services/customer/use-current-user";
 import toast from "react-hot-toast";
 
 export const useCart = () => {
@@ -41,7 +42,8 @@ export const useCart = () => {
   );
 
   /** React Query Mutations */
-  const { data: cartData } = useCartQuery();
+  const { data: currentUser } = useCurrentUserQuery();
+  const { data: cartData } = useCartQuery(currentUser?.id);
   const addMutation = useAddToCart();
   const updateMutation = useUpdateCartItem();
   const removeMutation = useRemoveFromCart();
@@ -53,8 +55,14 @@ export const useCart = () => {
   useEffect(() => {
     if (!cartData) return;
 
+    // Convert tax to number for all items from backend API
+    const itemsWithConvertedTax = (cartData.items ?? []).map((item: any) => ({
+      ...item,
+      tax: convertTaxToNumber(item.tax),
+    }));
+
     cartStore.setCart(
-      cartData.items ?? [],
+      itemsWithConvertedTax,
       cartData.discount ?? 0,
       cartData.coupon ?? null,
       cartData.finalTotal ?? undefined,

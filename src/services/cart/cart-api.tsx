@@ -8,16 +8,48 @@ import toast from "react-hot-toast";
 /* -------------------------------------------------------------------------- */
 /*                                🔹 FETCH CART                               */
 /* -------------------------------------------------------------------------- */
-const fetchCart = async () => {
-  const { data } = await http.get(API_RESOURCES.CART);
-  console.log("Fetched Cart Data:", data.data);
-  return data?.data;
+const fetchCart = async (userId?: string | null) => {
+  // Build URL with userId if provided
+  let url = API_RESOURCES.CART;
+  if (userId) {
+    url = `${API_RESOURCES.CART}?userId=${userId}`;
+  }
+  
+  const response = await http.get(url);
+  const { data } = response;
+  
+  // Get current user ID from cart response or try to extract from token
+  // Only access cookies on client side to avoid hydration issues
+  // Use the passed userId parameter, or try to extract from response/token
+  let extractedUserId = userId || data?.data?.userId || data?.data?.user?.id || data?.data?.user?._id || null;
+  
+  // If not in response, try to get from token (client-side only)
+  if (!extractedUserId && typeof window !== 'undefined' && typeof document !== 'undefined') {
+    try {
+      const userToken = document.cookie.split('; ').find(row => row.startsWith('user_token='))?.split('=')[1];
+      if (userToken && userToken.includes('.')) {
+        // Try JWT decode
+        const payload = JSON.parse(atob(userToken.split('.')[1]));
+        extractedUserId = payload?.id || payload?.userId || payload?.user?.id || payload?._id || null;
+      }
+    } catch (e) {
+      // Token might not be JWT format, ignore
+    }
+  }
+  
+  // Handle different response structures
+  // Backend might return: { data: { items: [...] } } OR { items: [...] }
+  const cartData = data?.data || data;
+  
+  return cartData;
 };
 
-const useCartQuery = () => {
+const useCartQuery = (userId?: string | null) => {
   return useQuery({
-    queryKey: [API_RESOURCES.CART],
-    queryFn: fetchCart,
+    queryKey: [API_RESOURCES.CART, userId],
+    queryFn: () => fetchCart(userId),
+    // Always enabled - backend can use token if userId not provided
+    // But including userId in query ensures tax is returned
   });
 };
 

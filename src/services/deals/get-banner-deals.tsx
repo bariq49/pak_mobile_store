@@ -37,7 +37,6 @@ interface DealsResponse {
 
 const fetchDeals = async (): Promise<Deal[]> => {
   const { data } = await http.get<DealsResponse>(API_RESOURCES.DEALS);
-  console.log("Fetched Deals:", data);
   return data.data.deals || [];
 };
 

@@ -25,7 +25,6 @@ const ProductQuantity: React.FC<ProductQuantityProps> = ({
   const variations = data.variations;
   // Ensure itemId is a string by using toString() or type assertion
   const itemId = (selectedVariation?.id ?? data._id ?? "").toString();
-  console.log("itemId", itemId);
   const outOfStock = isInCart(itemId) && !isInStock(itemId);
   // Safely handle data.quantity with a fallback
   const availableQuantity = data.quantity ?? 0;

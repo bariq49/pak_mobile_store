@@ -6,7 +6,37 @@ export interface Item {
   price: number;
   quantity?: number;
   stock?: number;
+  /** Optional tax percentage from backend, e.g. 2, 4, 21 */
+  tax?: number | null;
+  /** Computed per-item base total (price * quantity, without tax) */
+  itemBaseTotal?: number;
+  /** Computed per-item tax total */
+  itemTaxTotal?: number;
+  /** Computed per-item grand total (base + tax) */
+  itemTotal?: number;
   [key: string]: any;
+}
+
+/**
+ * Convert tax value from backend API to number
+ * Handles string numbers, numbers, null, undefined, empty strings
+ */
+export function convertTaxToNumber(tax: any): number | null {
+  // If already a number and valid
+  if (typeof tax === "number" && !isNaN(tax) && tax >= 0) {
+    return tax;
+  }
+  
+  // If string, try to parse
+  if (typeof tax === "string" && tax.trim() !== "") {
+    const parsed = parseFloat(tax.trim());
+    if (!isNaN(parsed) && parsed >= 0) {
+      return parsed;
+    }
+  }
+  
+  // Return null for invalid values
+  return null;
 }
 
 export interface UpdateItemInput extends Partial<Omit<Item, 'id'>> {}
@@ -74,14 +104,73 @@ export function inStock(items: Item[], id: Item['id']) {
   return false;
 }
 
-export const calculateItemTotals = (items: Item[]) =>
-  items.map((item) => ({
-    ...item,
-    itemTotal: item.price * item.quantity!,
-  }));
+/**
+ * Calculate tax-aware totals for a single product line.
+ *
+ * - tax is treated as a percentage (e.g. 4 = 4%)
+ * - tax is optional; if missing/0, only price is used
+ */
+export function calculateProductTotalsWithTax(
+  price: number,
+  quantity: number,
+  tax?: number | null | string
+) {
+  const safeQuantity = quantity > 0 ? quantity : 1;
+  const safePrice = price || 0;
+  // Convert tax to number if it's a string from API
+  const taxNumber = convertTaxToNumber(tax);
+  const taxRate = taxNumber !== null && taxNumber > 0 ? taxNumber : 0;
 
+  const baseTotal = safePrice * safeQuantity;
+  const taxTotal = taxRate
+    ? safePrice * (taxRate / 100) * safeQuantity
+    : 0;
+  const productTotal = baseTotal + taxTotal;
+
+  return {
+    baseTotal,
+    taxTotal,
+    productTotal,
+    taxRate,
+  };
+}
+
+/** Helper to get tax-aware totals for a full cart item */
+function getItemTotals(item: Item) {
+  const quantity = item.quantity ?? 1;
+  return calculateProductTotalsWithTax(item.price, quantity, item.tax);
+}
+
+export const calculateItemTotals = (items: Item[]) =>
+  items.map((item) => {
+    // Convert tax to number if it comes as string from backend API
+    const itemTax = convertTaxToNumber(item.tax);
+    const { baseTotal, taxTotal, productTotal, taxRate } = getItemTotals(item);
+
+    const result = {
+      ...item,
+      // Preserve tax as number from item if it exists, otherwise use calculated rate (which will be 0)
+      tax: itemTax ?? taxRate,
+      itemBaseTotal: baseTotal,
+      itemTaxTotal: taxTotal,
+      // itemTotal now includes tax when applicable
+      itemTotal: productTotal,
+    };
+
+    return result;
+  });
+
+/** Grand total for all items (base + tax for each line) */
 export const calculateTotal = (items: Item[]) =>
-  items.reduce((total, item) => total + item.quantity! * item.price, 0);
+  items.reduce((total, item) => total + getItemTotals(item).productTotal, 0);
+
+/** Subtotal without tax (sum of base totals) */
+export const calculateSubtotalWithoutTax = (items: Item[]) =>
+  items.reduce((total, item) => total + getItemTotals(item).baseTotal, 0);
+
+/** Total tax amount across all items */
+export const calculateTaxTotal = (items: Item[]) =>
+  items.reduce((total, item) => total + getItemTotals(item).taxTotal, 0);
 
 export const calculateTotalItems = (items: Item[]) =>
   items.reduce((sum, item) => sum + item.quantity!, 0);

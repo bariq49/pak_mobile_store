@@ -43,7 +43,6 @@ export const useAddAddressMutation = () => {
 //  2. Get all addresses
 async function getAddresses(): Promise<Address[]> {
   const { data } = await http.get(API_RESOURCES.ADDRESSES);
-  console.log(data,"address data");
   return data?.data?.addresses || [];
 }
 export const useAddressesQuery = () => {

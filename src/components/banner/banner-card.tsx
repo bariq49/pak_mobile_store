@@ -50,7 +50,7 @@ const BannerCard: React.FC<BannerProps> = ({
                         width={0}
                         height={0}
                         sizes="100vw"
-                        className={cn('absolute top-0 left-0 right-0 bottom-0 max-w-full max-h-full min-w-full min-h-full object-cover', {
+                        className={cn('absolute top-0 left-0 right-0 bottom-0 max-w-full max-h-full min-w-full min-h-full rounded-2xl', {
                             'rounded-md': variant === 'rounded',
                         })}
                        

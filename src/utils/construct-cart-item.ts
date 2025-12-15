@@ -1,5 +1,6 @@
 import isEmpty from "lodash/isEmpty";
 import { Product, VariationOption } from "@/services/types";
+import { convertTaxToNumber } from "@/services/utils/cartUtils";
 
 interface Item {
   id: string | number;
@@ -23,9 +24,10 @@ function isProduct(data: Item | Product): data is Product {
 }
 export function constructCartItem(
   item: Item | Product,
-  variation: VariationOption
+  variation?: VariationOption | null
 ) {
-  const { id, name, slug, image, price, sale_price, quantity, unit } =
+  // Extract all fields including tax from product/item
+  const { id, name, slug, image, price, sale_price, quantity, unit, tax } =
     item ?? {};
 
   // Normalize image to string using type guard
@@ -33,7 +35,18 @@ export function constructCartItem(
     ? item?.image?.thumbnail ?? ""
     : (image as string) ?? "";
 
-  if (!isEmpty(variation)) {
+  // IMPORTANT: Extract tax directly from product object if it's a Product type
+  // Sometimes destructuring might miss it, so check the original object
+  const taxFromProduct = isProduct(item) 
+    ? (item as Product).tax ?? tax
+    : tax;
+
+  // Tax always comes from product level (variants don't have tax in API response)
+  // Convert tax to number if it comes as string from backend API
+  const productTax = convertTaxToNumber(taxFromProduct);
+
+  // Handle variable products with variation
+  if (variation && !isEmpty(variation)) {
     return {
       id: `${id}.${variation.id}`,
       productId: id,
@@ -44,8 +57,12 @@ export function constructCartItem(
       price: variation.sale_price ? variation.sale_price : variation.price,
       image: imageString,
       variationId: variation.id,
+      // Tax always comes from product (variants don't have tax in API response)
+      tax: productTax,
     };
   }
+  
+  // Handle simple products (no variation)
   return {
     id,
     name,
@@ -54,5 +71,7 @@ export function constructCartItem(
     image: imageString,
     stock: quantity ?? 0, // Default to 0 if undefined
     price: sale_price ?? price,
+    // Include tax from product
+    tax: productTax,
   };
 }
