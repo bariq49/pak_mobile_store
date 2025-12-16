@@ -29,9 +29,9 @@ const WidgetAbout: React.FC<AboutProps> = ({ social, className }) => {
         />
 
         <div className="mb-3">
-          Address: Spain
+          Address: Calle onda 22 Bajo Castellón 12006
         </div>
-        <div className="mt-4">Phone: +34607773334</div>
+        <div className="mt-4">Teléfono: 613 283 624</div>
         <div className="mb-2">Email: pakmobilestore@gmail.com</div>
       </div>
 

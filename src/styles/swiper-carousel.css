@@ -68,9 +68,35 @@ span.swiper-pagination-bullet{
   max-height: 580px;
 }
 #productGalleryThumbs .swiper-wrapper .swiper-slide {
-  /*height: auto !Important;*/
   justify-content: center;
-  display: flex
+  display: flex;
+  align-items: stretch;
+}
+#productGalleryThumbs .swiper-wrapper .swiper-slide.aspect-square {
+  aspect-ratio: 1 / 1 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+#productGalleryThumbs .swiper-wrapper .swiper-slide.aspect-square[style*="height"] {
+  height: auto !important;
+}
+#productGalleryThumbs .swiper-wrapper .swiper-slide > div {
+  height: 100%;
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+#productGalleryThumbs .swiper-wrapper .swiper-slide > div > div {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+#productGalleryThumbs .swiper-wrapper .swiper-slide > div > div > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 #productGalleryThumbs .swiper-wrapper .swiper-slide-thumb-active {
   border-color: #999;

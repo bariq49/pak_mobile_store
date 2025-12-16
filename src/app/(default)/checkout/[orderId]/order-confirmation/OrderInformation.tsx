@@ -18,6 +18,11 @@ import {
 export default function OrderInformation() {
   const params = useParams();
   const orderId = params?.orderId as string;
+  
+  if (typeof window !== 'undefined') {
+    console.log('Order ID:', orderId);
+  }
+  
   const { data, isLoading } = useOrderQuery(orderId);
   const order = data?.order;
 

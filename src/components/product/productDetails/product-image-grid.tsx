@@ -132,7 +132,7 @@ const ProductImageGrid: React.FC<GalleryProps> = ({data, variant = 'glass', clas
                                             alt={`Product gallery ${item.id || index}`}
                                             width={650}
                                             height={590}
-                                            className="mx-auto rounded-lg object-cover"
+                                            className="mx-auto rounded-lg"
                                         />
                                     </a>
                                 )

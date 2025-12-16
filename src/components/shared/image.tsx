@@ -36,16 +36,20 @@ const ImageFill: React.FC<Props> = ({
   
   // Use placeholder if src is invalid
   const imageSrc = isValidSrc ? src : productPlaceholder;
+  
+  const hasFullHeight = rootClassName?.includes("h-full");
+  const hasAspectSquare = rootClassName?.includes("aspect-square");
 
   return (
     <div className={cn("relative md:inline-block ", rootClassName)}>
-      <div className={cn("block w-full box-sizing")}>
+      <div className={cn("block w-full box-sizing", hasFullHeight && "h-full", hasAspectSquare && "aspect-square")}>
         <svg
-          className="block max-w-full h-auto"
+          className={cn("block max-w-full", (hasFullHeight || hasAspectSquare) ? "h-full w-full" : "h-auto")}
           xmlns="http://www.w3.org/2000/svg"
           width={width}
           height={height}
           version="1.1"
+          preserveAspectRatio="none"
         />
       </div>
       <Image

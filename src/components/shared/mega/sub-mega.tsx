@@ -65,7 +65,7 @@ const SubMega: React.FC<MenuProps> = ({item}) => {
                                         alt={'Product Image'}
                                         width={450}
                                         height={300}
-                                        className="rounded object-cover bg-skin-thumbnail"
+                                        className="rounded bg-skin-thumbnail"
                                     />
                                 </div>
                             </Link>

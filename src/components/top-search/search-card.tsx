@@ -69,7 +69,7 @@ const SearchCard: React.FC<SearchProductProps> = ({ product }) => {
           width={70}
           height={70}
           alt={name || 'Product Image'}
-          className="object-cover bg-fill-thumbnail"
+          className="object-contain bg-fill-thumbnail"
         />
       </div>
 

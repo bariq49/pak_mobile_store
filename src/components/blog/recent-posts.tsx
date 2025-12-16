@@ -29,7 +29,7 @@ export default function RecentPosts() {
                                 alt={post.title || 'Product Image'}
                                 width={150}
                                 height={130}
-                                className="object-cover rounded "
+                                className="rounded "
                             />
                         </div>
                         <div>

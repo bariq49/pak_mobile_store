@@ -31,6 +31,7 @@ const ProductImage: React.FC<ProductImageProps> = ({ product, outOfStock }) => {
           alt={name || "Product Image"}
           width={200}
           height={200}
+          className="object-contain"
         />
       </div>
 
