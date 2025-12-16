@@ -14,8 +14,9 @@ interface Props {
 export default function StoreLocation({
                                           useStore = true,height="420px"
                                       }: React.PropsWithChildren<Props>) {
-    // Get URL from Google Maps URL
-    const selectedLocation = "https://www.google.com/maps/@-37.7603734,144.7878172,17z?entry=ttu&g_ep=EgoyMDI1MDQyMi4wIKXMDSoJLDEwMjExNjM5SAFQAw%3D%3D";
+    // Google Maps URL for Calle onda 22, Castellón, Spain
+    // Coordinates: approximately 39.9864° N, -0.0513° W
+    const selectedLocation = "https://www.google.com/maps/@39.9864,-0.0513,17z?entry=ttu";
     
     return (
         <div className="relative w-full overflow-hidden">
@@ -28,8 +29,8 @@ export default function StoreLocation({
                                 <h3 className="text-sm  font-normal">OUR STORES</h3>
                                 <div className="py-2 text-15px">
                                     <Heading variant="titleMedium" className="mb-3">Visit Our Store</Heading>
-                                    <p className="mb-1"> 123 Widget Street Acmeville.</p>
-                                    <p className=""> AC 12345 United States of America</p>
+                                    <p className="mb-1">Calle onda 22 Bajo</p>
+                                    <p className="">Castellón 12006, Spain</p>
                                 </div>
                                 <div className="pt-0 ">
                                     <Link href={'#'} className={"text-sm"} variant={'base'} >
@@ -44,7 +45,7 @@ export default function StoreLocation({
             
             {/* GMap  */}
             <iframe
-                src={getLocation(selectedLocation)}
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.5!2d-0.0513!3d39.9864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDU5JzExLjAiTiAwwrAwMycwNC43Ilc!5e0!3m2!1sen!2ses!4v1234567890!5m2!1sen!2ses"
                 width="100%"
                 height={height}
                 style={{border: 0}}

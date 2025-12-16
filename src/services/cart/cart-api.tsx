@@ -58,15 +58,28 @@ const useCartQuery = (userId?: string | null) => {
 /* -------------------------------------------------------------------------- */
 const addToCart = async ({
   productId,
+  variantId,
   quantity = 1,
 }: {
   productId: string | number;
+  variantId?: string | null;
   quantity?: number;
 }) => {
-  const { data } = await http.post(`${API_RESOURCES.CART}/add`, {
+  const requestBody: {
+    productId: string | number;
+    variantId?: string | null;
+    quantity: number;
+  } = {
     productId,
     quantity,
-  });
+  };
+
+  // Only include variantId if it's provided (for variable products)
+  if (variantId) {
+    requestBody.variantId = variantId;
+  }
+
+  const { data } = await http.post(`${API_RESOURCES.CART}/add`, requestBody);
   return data?.data?.cart;
 };
 

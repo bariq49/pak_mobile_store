@@ -35,6 +35,7 @@ const ProductCardVertical: React.FC<ProductProps> = ({
 						alt={name || 'Product Image'}
 						width={105}
 						height={105}
+						className=""
 					/>
 				</div>
 			</div>

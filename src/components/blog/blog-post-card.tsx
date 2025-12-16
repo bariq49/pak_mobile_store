@@ -84,7 +84,7 @@ const BlogPostCard: React.FC<BlogProps> = ({ blogData, className }) => {
               alt={title || 'Product Image'}
               width={1050}
               height={460}
-              className="object-cover bg-skin-thumbnail"
+              className="bg-skin-thumbnail"
             />
           </div>
         </Link>

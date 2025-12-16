@@ -5,6 +5,7 @@ import type { CartState } from "@/stores/useCartStore";
 import { Product, VariationOption } from "@/services/types";
 import { constructCartItem } from "@/utils/construct-cart-item";
 import { Item, convertTaxToNumber } from "@/services/utils/cartUtils";
+import { findMatchingVariant } from "@/services/utils/convert-variants-to-variations";
 import {
   useCartQuery,
   useAddToCart,
@@ -16,6 +17,14 @@ import {
 } from "@/services/cart/cart-api";
 import { useCurrentUserQuery } from "@/services/customer/use-current-user";
 import toast from "react-hot-toast";
+
+// Type guard to check if data is a Product
+function isProduct(data: Item | Product): data is Product {
+  return (
+    (data as Product).image !== undefined &&
+    typeof (data as Product).image !== "string"
+  );
+}
 
 export const useCart = () => {
   const cartStore = useCartStore(
@@ -85,9 +94,36 @@ export const useCart = () => {
       setAddToCartLoader(true);
       const item = constructCartItem(data, selectedVariation!);
 
+      // Extract variantId for variable products
+      let variantId: string | null | undefined = undefined;
+      
+      // Check if product has variants and a variation is selected
+      if (isProduct(data) && data.variants && data.variants.length > 0 && selectedVariation) {
+        // Convert selectedVariation.options to attributes object for matching
+        const attributes: { [key: string]: string } = {};
+        if (selectedVariation.options && Array.isArray(selectedVariation.options)) {
+          selectedVariation.options.forEach((option) => {
+            if (option.name && option.value) {
+              attributes[option.name] = option.value;
+            }
+          });
+        }
+
+        // Find matching variant from product.variants array
+        const matchingVariant = findMatchingVariant(data.variants, attributes);
+        
+        if (matchingVariant && matchingVariant._id) {
+          variantId = matchingVariant._id;
+        }
+      }
+
+      // Use productId from the product's _id or id field
+      const productId = isProduct(data) ? (data._id || data.id) : item.productId || item.id;
+
       try {
         await addMutation.mutateAsync({
-          productId: item.id,
+          productId: productId.toString(),
+          variantId: variantId,
           quantity: selectedQuantity,
         });
         cartStore.addItemWithQuantity(item, selectedQuantity);

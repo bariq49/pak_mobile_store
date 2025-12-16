@@ -34,7 +34,7 @@ const BlogImage: React.FC<BlogProps> = ({ blog, variant="default" }) => {
                         alt={title || 'Product Image'}
                         width={imgSize.width}
                         height={imgSize.height}
-                        className="object-cover bg-skin-thumbnail"
+                        className="bg-skin-thumbnail"
                     />
                 </div>
             </Link>

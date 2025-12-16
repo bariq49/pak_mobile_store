@@ -10,17 +10,17 @@ const data = [
   {
     id: 1,
     name: 'Address',
-    description: 'Acme Widgets 123 Widget Street Acmeville, AC 12345 United States of America',
+    description: 'Calle onda 22 Bajo Castellón 12006',
   },
   {
     id: 2,
-    name: 'Phone',
-    description: '+222-1800-2628 </br> +888-1800-2628'
+    name: 'Teléfono',
+    description: '613 283 624'
   },
   {
     id: 3,
     name: 'Email',
-    description: 'contact@ibigecommerce.com',
+    description: 'pakmobilestore@gmail.com',
   },
   {
     id: 4,

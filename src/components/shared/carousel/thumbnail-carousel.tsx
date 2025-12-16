@@ -179,14 +179,18 @@ const ThumbnailCarousel: React.FC<Props> = ({
           {gallery?.map((item: any, index: number) => (
             <SwiperSlide
               key={`product-thumb-gallery-${item.id || index}`}
-              className="cursor-pointer rounded overflow-hidden border transition hover:opacity-75 border-border-base box-content"
+              className="cursor-pointer rounded border transition hover:opacity-75 border-border-base relative aspect-square"
             >
-              <Image
-                src={item?.thumbnail ?? productGalleryPlaceholder}
-                alt={`Product thumb gallery ${item.id || index}`}
-                width={150}
-                height={150}
-              />
+              <div className="w-full h-full overflow-hidden rounded">
+                <Image
+                  src={item?.thumbnail ?? productGalleryPlaceholder}
+                  alt={`Product thumb gallery ${item.id || index}`}
+                  width={150}
+                  height={150}
+                  rootClassName="w-full h-full block aspect-square"
+                  className="w-full h-full object-cover"
+                 />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>

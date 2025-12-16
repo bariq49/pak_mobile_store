@@ -38,7 +38,7 @@ const CartItemDrawer: React.FC<CartItemProps> = ({ item }) => {
             width={80}
             height={80}
             alt={item.name || "Product Image"}
-            className="object-cover bg-fill-thumbnail"
+            className="object-contain bg-fill-thumbnail"
           />
         </Link>
       </div>
