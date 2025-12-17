@@ -100,16 +100,28 @@ const useAddToCart = () => {
 /*                             🔹 UPDATE CART ITEM                            */
 /* -------------------------------------------------------------------------- */
 const updateCartItem = async ({
-  productId,
+  identifier,
   quantity,
 }: {
-  productId: string;
+  identifier: string | number | { productId: string | number; variantId?: string | number | null };
   quantity: number;
 }) => {
-  const { data } = await http.patch(
-    `${API_RESOURCES.CART}/update/${productId}`,
-    { quantity }
-  );
+  // Handle different identifier formats (same as removeFromCart)
+  let url = `${API_RESOURCES.CART}/update/`;
+  
+  if (typeof identifier === 'object' && identifier !== null && 'productId' in identifier) {
+    // For variant items, we need both productId and variantId
+    if (identifier.variantId) {
+      url += `${identifier.productId}?variantId=${identifier.variantId}`;
+    } else {
+      url += identifier.productId;
+    }
+  } else {
+    // Simple identifier (string or number)
+    url += identifier;
+  }
+  
+  const { data } = await http.patch(url, { quantity });
   return data?.data?.cart;
 };
 
@@ -129,10 +141,32 @@ const useUpdateCartItem = () => {
 /* -------------------------------------------------------------------------- */
 /*                            🔹 REMOVE CART ITEM                             */
 /* -------------------------------------------------------------------------- */
-const removeFromCart = async (productId: string | number) => {
-  const { data } = await http.delete(
-    `${API_RESOURCES.CART}/remove/${productId}`
-  );
+const removeFromCart = async (identifier: string | number | { productId: string | number; variantId?: string | number | null }) => {
+  // Handle different identifier formats:
+  // 1. Backend cart item _id (most reliable) - use directly
+  // 2. Object with productId and optional variantId - use productId in URL, variantId in body or query
+  // 3. Simple productId string/number (legacy) - use directly
+  
+  let url = `${API_RESOURCES.CART}/remove/`;
+  let requestBody: any = undefined;
+  
+  if (typeof identifier === 'object' && identifier !== null && 'productId' in identifier) {
+    // For variant items, we need both productId and variantId
+    url += identifier.productId;
+    if (identifier.variantId) {
+      // Try variantId as query parameter first (common REST pattern)
+      url += `?variantId=${identifier.variantId}`;
+      // Alternative: could also send in request body if backend prefers that
+      // requestBody = { variantId: identifier.variantId };
+    }
+  } else {
+    // Simple identifier (string or number) - backend _id or productId
+    url += identifier;
+  }
+  
+  // DELETE requests typically don't have a body, but some APIs accept it
+  // If needed, we can modify this to send body for variant items
+  const { data } = await http.delete(url, requestBody ? { data: requestBody } : undefined);
   return data?.data?.cart;
 };
 

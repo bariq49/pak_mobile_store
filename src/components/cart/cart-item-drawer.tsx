@@ -21,19 +21,37 @@ const CartItemDrawer: React.FC<CartItemProps> = ({ item }) => {
 
   const quantity = item.quantity ?? 1;
 
+  // Check if dealPrice exists and is valid (not null, > 0, and < originalPrice)
   const hasBackendDeal =
     typeof item.originalPrice === "number" &&
     item.originalPrice > 0 &&
     typeof item.dealPrice === "number" &&
+    item.dealPrice !== null &&
     item.dealPrice > 0 &&
     item.dealPrice < item.originalPrice;
 
-  const effectiveUnit =
-    hasBackendDeal && typeof item.dealPrice === "number"
-      ? item.dealPrice
-      : item?.sale_price
-      ? item.sale_price
-      : item.price;
+  // Use dealPrice if valid, otherwise use originalPrice
+  const effectiveUnit = hasBackendDeal && typeof item.dealPrice === "number"
+    ? item.dealPrice
+    : (typeof item.originalPrice === "number" && item.originalPrice > 0
+        ? item.originalPrice
+        : item.price);
+
+  // For display: unit price with strike-through if deal exists
+  const unitAmount = hasBackendDeal
+    ? item.dealPrice!
+    : (typeof item.originalPrice === "number" && item.originalPrice > 0
+        ? item.originalPrice
+        : item.price);
+
+  const baseAmount = hasBackendDeal
+    ? item.originalPrice!
+    : undefined;
+
+  const { price: unitPrice, basePrice } = usePrice({
+    amount: unitAmount,
+    baseAmount,
+  });
 
   const { price: totalPrice } = usePrice({
     amount: item?.itemTotal ?? effectiveUnit * quantity,
@@ -67,26 +85,36 @@ const CartItemDrawer: React.FC<CartItemProps> = ({ item }) => {
             {item.name}
           </Link>
           <div className="text-sm font-semibold text-brand-dark mt-2 block mb-2">
-            {totalPrice}
+            <div className="flex items-center gap-2">
+              <span>{unitPrice}</span>
+              {basePrice && (
+                <del className="text-xs text-gray-400 text-opacity-70">
+                  {basePrice}
+                </del>
+              )}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Total: {totalPrice}
+            </div>
           </div>
 
           <div className="flex gap-2 md:gap-4 items-center">
             <Counter
               value={quantity}
               onIncrement={() =>
-                updateQuantity(item.id as string, quantity + 1)
+                updateQuantity(item, quantity + 1)
               }
               onDecrement={() =>
                 quantity > 1
-                  ? updateQuantity(item.id as string, quantity - 1)
-                  : removeItem(item.id as string)
+                  ? updateQuantity(item, quantity - 1)
+                  : removeItem(item)
               }
               variant="cart"
               disabled={outOfStock || isUpdating || isRemoving}
             />
 
             <button
-              onClick={() => removeItem(item.id as string)}
+              onClick={() => removeItem(item)}
               disabled={isRemoving}
               className="flex items-center gap-1 text-gray-500 text-13px underline cursor-pointer disabled:opacity-50"
             >

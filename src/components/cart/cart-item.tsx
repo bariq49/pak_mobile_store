@@ -24,26 +24,30 @@ export function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem, isUpdating, isRemoving } =
     useCartActions();
 
+  // Check if dealPrice exists and is valid (not null, > 0, and < originalPrice)
   const hasBackendDeal =
     typeof item.originalPrice === "number" &&
     item.originalPrice > 0 &&
     typeof item.dealPrice === "number" &&
+    item.dealPrice !== null &&
     item.dealPrice > 0 &&
     item.dealPrice < item.originalPrice;
 
+  // Use dealPrice if valid, otherwise use originalPrice
   const unitAmount = hasBackendDeal
     ? item.dealPrice!
-    : item?.sale_price
-    ? item.sale_price
-    : item.price;
+    : (typeof item.originalPrice === "number" && item.originalPrice > 0
+        ? item.originalPrice
+        : item.price);
 
+  // baseAmount is originalPrice when there's a deal, otherwise same as unitAmount
   const baseAmount = hasBackendDeal
     ? item.originalPrice!
-    : item.price;
+    : unitAmount;
 
   const { price, basePrice } = usePrice({
     amount: unitAmount,
-    baseAmount,
+    baseAmount: hasBackendDeal ? baseAmount : undefined,
   });
 
   const { price: minPrice } = usePrice({
@@ -53,12 +57,12 @@ export function CartItem({ item }: CartItemProps) {
     amount: item?.max_price ?? 0,
   });
 
-  const effectiveLineUnit =
-    hasBackendDeal && typeof item.dealPrice === "number"
-      ? item.dealPrice
-      : item?.sale_price
-      ? item.sale_price
-      : item.price;
+  // For line total calculations: use dealPrice if valid, otherwise originalPrice
+  const effectiveLineUnit = hasBackendDeal && typeof item.dealPrice === "number"
+    ? item.dealPrice
+    : (typeof item.originalPrice === "number" && item.originalPrice > 0
+        ? item.originalPrice
+        : item.price);
 
   const { price: totalPrice } = usePrice({
     amount: item?.itemTotal ?? effectiveLineUnit * quantity,
@@ -94,7 +98,7 @@ export function CartItem({ item }: CartItemProps) {
         </Link>
 
         <button
-          onClick={() => removeItem(id as string)}
+          onClick={() => removeItem(item)}
           disabled={isRemoving}
           className="mt-1 inline-flex items-center gap-1 cursor-pointer transition-all text-gray-500 text-13px underline disabled:opacity-50"
         >
@@ -124,11 +128,11 @@ export function CartItem({ item }: CartItemProps) {
       <TableCell>
         <Counter
           value={quantity}
-          onIncrement={() => updateQuantity(id as string, quantity + 1)}
+          onIncrement={() => updateQuantity(item, quantity + 1)}
           onDecrement={() =>
             quantity > 1
-              ? updateQuantity(id as string, quantity - 1)
-              : removeItem(id as string)
+              ? updateQuantity(item, quantity - 1)
+              : removeItem(item)
           }
           variant="cart"
           disabled={outOfStock || isUpdating || isRemoving}

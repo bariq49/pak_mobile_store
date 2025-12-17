@@ -135,20 +135,78 @@ export const useCart = () => {
       }
     };
 
-    const updateQuantity = async (productId: string, quantity: number) => {
+    const updateQuantity = async (identifier: string | number | Item, quantity: number) => {
       try {
-        await updateMutation.mutateAsync({ productId, quantity });
-        cartStore.updateItem(productId, { quantity });
+        // If identifier is an Item object, extract the correct identifier
+        let updateIdentifier: string | number | { productId: string | number; variantId?: string | number | null };
+        
+        if (typeof identifier === 'object' && 'id' in identifier) {
+          const item = identifier as Item;
+          // Prefer backend _id if available (most reliable)
+          if (item._id) {
+            updateIdentifier = item._id;
+          } 
+          // For variant items, use productId + variantId
+          else if (item.variantId && item.productId) {
+            updateIdentifier = {
+              productId: item.productId,
+              variantId: item.variantId,
+            };
+          }
+          // Fallback to id field
+          else {
+            updateIdentifier = item.id;
+          }
+        } else {
+          // Simple string/number identifier
+          updateIdentifier = identifier;
+        }
+        
+        await updateMutation.mutateAsync({ identifier: updateIdentifier, quantity });
+        // Update local store using the item's id field
+        const itemId = typeof identifier === 'object' && 'id' in identifier 
+          ? (identifier as Item).id 
+          : identifier;
+        cartStore.updateItem(itemId, { quantity });
         toast.success("Cart updated");
       } catch {
         toast.error("Failed to update item");
       }
     };
 
-    const removeItem = async (productId: string) => {
+    const removeItem = async (identifier: string | number | Item) => {
       try {
-        await removeMutation.mutateAsync(productId);
-        cartStore.removeItem(productId);
+        // If identifier is an Item object, extract the correct identifier
+        let removeIdentifier: string | number | { productId: string | number; variantId?: string | number | null };
+        
+        if (typeof identifier === 'object' && 'id' in identifier) {
+          const item = identifier as Item;
+          // Prefer backend _id if available (most reliable)
+          if (item._id) {
+            removeIdentifier = item._id;
+          } 
+          // For variant items, use productId + variantId
+          else if (item.variantId && item.productId) {
+            removeIdentifier = {
+              productId: item.productId,
+              variantId: item.variantId,
+            };
+          }
+          // Fallback to id field
+          else {
+            removeIdentifier = item.id;
+          }
+        } else {
+          // Simple string/number identifier
+          removeIdentifier = identifier;
+        }
+        
+        await removeMutation.mutateAsync(removeIdentifier);
+        // Remove from local store using the item's id field
+        const itemId = typeof identifier === 'object' && 'id' in identifier 
+          ? (identifier as Item).id 
+          : identifier;
+        cartStore.removeItem(itemId);
         toast.success("Item removed from cart");
       } catch {
         toast.error("Failed to remove item");

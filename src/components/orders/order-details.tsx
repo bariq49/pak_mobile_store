@@ -116,19 +116,40 @@ const useOrderItemImage = (item: OrderItem) => {
 };
 
 const OrderItemCard = ({ item }: { item: OrderItem }) => {
+  // Check if dealPrice exists and is valid (not null, > 0, and < originalPrice)
   const hasBackendDeal =
     typeof item.originalPrice === "number" &&
     item.originalPrice > 0 &&
     typeof item.dealPrice === "number" &&
+    item.dealPrice !== null &&
     item.dealPrice > 0 &&
     item.dealPrice < item.originalPrice;
 
+  // Use dealPrice if valid, otherwise use originalPrice
+  const effectiveUnit = hasBackendDeal && typeof item.dealPrice === "number"
+    ? item.dealPrice
+    : (typeof item.originalPrice === "number" && item.originalPrice > 0
+        ? item.originalPrice
+        : item.price);
+
+  // For display: unit price with strike-through if deal exists
   const unitAmount = hasBackendDeal
     ? (item.dealPrice as number)
-    : item.price;
+    : (typeof item.originalPrice === "number" && item.originalPrice > 0
+        ? item.originalPrice
+        : item.price);
+
+  const baseAmount = hasBackendDeal
+    ? item.originalPrice!
+    : undefined;
+
+  const { price: unitPrice, basePrice } = usePrice({
+    amount: unitAmount,
+    baseAmount,
+  });
 
   const { price: itemTotal } = usePrice({
-    amount: unitAmount * item.quantity,
+    amount: effectiveUnit * item.quantity,
   });
 
   const resolvedImage = useOrderItemImage(item);
@@ -153,6 +174,14 @@ const OrderItemCard = ({ item }: { item: OrderItem }) => {
           <span className="font-medium">{item.quantity} x </span>
           {item.name}
         </p>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="font-semibold text-xs">{unitPrice}</span>
+          {basePrice && (
+            <del className="text-xs text-gray-400 text-opacity-70">
+              {basePrice}
+            </del>
+          )}
+        </div>
         {hasTax && (
           <span className="text-xs text-gray-500 mt-1 block">
             Includes {(item as any).tax}% tax
