@@ -26,7 +26,7 @@ const SpecialDealBanner: React.FC<SpecialDealBannerProps> = ({ deal }) => {
         width={600}
         height={200}
         rootClassName="h-full w-full"
-        className="transition-opacity duration-300 group-hover:opacity-80 object-center h-full"
+        className="transition-opacity duration-300 group-hover:opacity-80 object-center h-full object-cover"
         loading="lazy"
         priority={false}
       />

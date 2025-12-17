@@ -9,7 +9,7 @@ import { homeThreeHeroCarousel as fallbackHeroCarousel } from "@/components/bann
 import SpecialDealBanner from "@/components/deals/special-deal-banner";
 
 const HomeHeroWithDeals: React.FC = () => {
-  const { specialDeals } = useDeals();
+  const { specialDeals, isLoading } = useDeals();
   const hasSpecial = specialDeals && specialDeals.length > 0;
 
   return (
@@ -19,7 +19,11 @@ const HomeHeroWithDeals: React.FC = () => {
 
         {/* Right side: special deal variants as dynamic banners */}
         <div className="mb-7 staticBanner--slider">
-          {hasSpecial ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center min-h-[220px]">
+              <p className="text-gray-500">Loading deals...</p>
+            </div>
+          ) : hasSpecial ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-1 xl:grid-cols-1">
               {specialDeals.slice(0, 2).map((deal) => (
                 <SpecialDealBanner key={deal._id} deal={deal} />

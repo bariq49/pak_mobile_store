@@ -63,7 +63,7 @@ const ImageFill: React.FC<Props> = ({
         className={cn(
           "absolute top-0 left-0 right-0 bottom-0 max-w-full max-h-full min-w-full w-auto h-auto object-contain",
           {
-            " min-h-full": variant === "contain",
+            " min-h-full": variant === "cover",
           },
           className
         )}
