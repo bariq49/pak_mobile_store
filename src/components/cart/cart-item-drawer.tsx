@@ -20,8 +20,23 @@ const CartItemDrawer: React.FC<CartItemProps> = ({ item }) => {
     useCartActions();
 
   const quantity = item.quantity ?? 1;
+
+  const hasBackendDeal =
+    typeof item.originalPrice === "number" &&
+    item.originalPrice > 0 &&
+    typeof item.dealPrice === "number" &&
+    item.dealPrice > 0 &&
+    item.dealPrice < item.originalPrice;
+
+  const effectiveUnit =
+    hasBackendDeal && typeof item.dealPrice === "number"
+      ? item.dealPrice
+      : item?.sale_price
+      ? item.sale_price
+      : item.price;
+
   const { price: totalPrice } = usePrice({
-    amount: item?.itemTotal ?? item.price * quantity,
+    amount: item?.itemTotal ?? effectiveUnit * quantity,
   });
 
   const outOfStock = isInCart(item.id) && !isInStock(item.id);

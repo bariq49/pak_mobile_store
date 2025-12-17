@@ -2,8 +2,19 @@ import usePrice from '@/services/product/use-price';
 import Image from '@/components/shared/image';
 
 export const OrderDetailsContent: React.FC<{ item?: any }> = ({ item }) => {
+  const hasBackendDeal =
+    typeof item?.originalPrice === 'number' &&
+    item.originalPrice > 0 &&
+    typeof item?.dealPrice === 'number' &&
+    item.dealPrice > 0 &&
+    item.dealPrice < item.originalPrice;
+
+  const unitAmount = hasBackendDeal
+    ? item.dealPrice as number
+    : item.price;
+
   const { price } = usePrice({
-    amount: item.price,
+    amount: unitAmount * (item.quantity ?? 1),
   });
   return (
     <div className="relative grid grid-cols-12 py-2 pb-0 border-b border-solid border-border-base text-[12px] md:text-[14px]">
@@ -23,7 +34,7 @@ export const OrderDetailsContent: React.FC<{ item?: any }> = ({ item }) => {
         {typeof item.quantity === 'number' && <p>{item.quantity} x</p>}
       </div>
       <div className="self-center col-span-2">
-        {typeof item.price === 'number' && <p>{price}</p>}
+        <p>{price}</p>
       </div>
     </div>
   );

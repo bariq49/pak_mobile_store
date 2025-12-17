@@ -131,6 +131,10 @@ export type Product = {
   videoUrl?: string;
   sale_price?: number;
   salePrice?: number; // Alternative field name
+  /** Backend-computed original (effective) unit price before any deal, used for strike-through display. */
+  originalPrice?: number | null;
+  /** Backend-computed deal unit price when a deal is applied; null or >= originalPrice when no active deal. */
+  dealPrice?: number | null;
   min_price?: number;
   max_price?: number;
   variation_options: VariationOption[];

@@ -8,6 +8,10 @@ export interface Item {
   stock?: number;
   /** Optional tax percentage from backend, e.g. 2, 4, 21 */
   tax?: number | null;
+  /** Backend-computed original (effective) unit price before any deal, used for strike-through and subtotals. */
+  originalPrice?: number | null;
+  /** Backend-computed deal unit price when a deal is applied; null or >= originalPrice when no active deal. */
+  dealPrice?: number | null;
   /** Computed per-item base total (price * quantity, without tax) */
   itemBaseTotal?: number;
   /** Computed per-item tax total */

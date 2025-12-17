@@ -1,12 +1,9 @@
 import Container from "@/components/shared/container";
-import HeroSliderBlock from "@/components/hero/hero-slider-block";
-import BannerGrid from "@/components/banner/banner-grid";
 import BestSidebarFeed from "@/components/product/feeds/best-seller-sidebar-feed";
 import NewSidebarFeed from "@/components/product/feeds/new-sidebar-feed";
-import { homeThreeHeroCarousel as bannerHeroCarousel } from "@/components/banner/data";
-import ServiceFeature from "@/components/common/service-featured";
 import ListingCategory from "@/components/product/listingtabs/listing-category";
 import SaleProductsFeed from "@/components/product/feeds/on-sales-feed";
+import HomeHeroWithDeals from "@/components/home/home-hero-with-deals";
 
 export const metadata = {
   title: "Home",
@@ -15,18 +12,7 @@ export const metadata = {
 export default async function Page() {
   return (
     <>
-      <Container variant={"Large"}>
-        <div className="grid gap-4 grid-cols-1 xl:gap-5 lg:grid-cols-[minmax(65%,_1fr)_1fr] 2xl:grid-cols-[minmax(68%,_1fr)_1fr]">
-          <HeroSliderBlock />
-          <BannerGrid
-            data={bannerHeroCarousel}
-            grid={1}
-            className="mb-7 staticBanner--slider"
-            girdClassName={"xl:gap-6"}
-          />
-        </div>
-        <ServiceFeature />
-      </Container>
+      <HomeHeroWithDeals />
 
       <Container variant={"Large"}>
         <div className="grid grid-cols-12 gap-4 xl:gap-8">

@@ -24,6 +24,8 @@ const ProductCard: React.FC<ProductProps> = ({
   const { outOfStock } = useCartHelpers();
   const statusOutOfStock = outOfStock(id) || quantity < 1;
 
+  // Debug: Log product IDs
+ 
   return (
     <article
       className={cn(

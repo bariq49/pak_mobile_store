@@ -24,9 +24,26 @@ export function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem, isUpdating, isRemoving } =
     useCartActions();
 
+  const hasBackendDeal =
+    typeof item.originalPrice === "number" &&
+    item.originalPrice > 0 &&
+    typeof item.dealPrice === "number" &&
+    item.dealPrice > 0 &&
+    item.dealPrice < item.originalPrice;
+
+  const unitAmount = hasBackendDeal
+    ? item.dealPrice!
+    : item?.sale_price
+    ? item.sale_price
+    : item.price;
+
+  const baseAmount = hasBackendDeal
+    ? item.originalPrice!
+    : item.price;
+
   const { price, basePrice } = usePrice({
-    amount: item?.sale_price ? item?.sale_price : item?.price,
-    baseAmount: item?.price,
+    amount: unitAmount,
+    baseAmount,
   });
 
   const { price: minPrice } = usePrice({
@@ -36,8 +53,15 @@ export function CartItem({ item }: CartItemProps) {
     amount: item?.max_price ?? 0,
   });
 
+  const effectiveLineUnit =
+    hasBackendDeal && typeof item.dealPrice === "number"
+      ? item.dealPrice
+      : item?.sale_price
+      ? item.sale_price
+      : item.price;
+
   const { price: totalPrice } = usePrice({
-    amount: item?.itemTotal ?? item.price * quantity,
+    amount: item?.itemTotal ?? effectiveLineUnit * quantity,
   });
 
   const outOfStock = isInCart(item?.id) && !isInStock(item.id);

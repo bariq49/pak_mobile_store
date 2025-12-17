@@ -3,25 +3,149 @@
 import usePrice from "@/services/product/use-price";
 import { Order, OrderItem } from "@/services/order/order-api";
 import { Printer, ShoppingBag } from "lucide-react";
-import React from "react";
-import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import Image from "@/components/shared/image";
 import { productPlaceholder } from "@/assets/placeholders";
 import Link from "../shared/link";
+import {
+  calculateSubtotalWithoutTax,
+  calculateTaxTotal,
+} from "@/services/utils/cartUtils";
+import http from "@/services/utils/http";
+import { API_RESOURCES } from "@/services/utils/api-endpoints";
+
+// Resolve a displayable image URL for an order item.
+// - Uses existing image attachment/string when available.
+// - If the backend only sends a product ObjectId for the item image,
+//   we fetch the product and derive its image (similar to how cart items get image from product).
+const useOrderItemImage = (item: OrderItem) => {
+  const [resolvedImage, setResolvedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const resolve = async () => {
+      // 1) If item already has an image field (attachment-like object or URL string), prefer that.
+      const rawImage: any = (item as any).image;
+
+      if (rawImage && typeof rawImage === "object") {
+        const candidate =
+          rawImage.thumbnail ||
+          rawImage.original ||
+          rawImage.original2 ||
+          null;
+        if (!cancelled && candidate) {
+          setResolvedImage(candidate);
+          return;
+        }
+      }
+
+      if (typeof rawImage === "string" && rawImage) {
+        const looksLikeUrl =
+          rawImage.startsWith("http://") ||
+          rawImage.startsWith("https://") ||
+          rawImage.startsWith("/") ||
+          rawImage.includes(".");
+
+        if (!cancelled && looksLikeUrl) {
+          setResolvedImage(rawImage);
+          return;
+        }
+      }
+
+      // 2) If the order item contains a populated product object, extract image from it.
+      const productField: any = (item as any).product;
+      if (productField && typeof productField === "object") {
+        const candidateFromObject =
+          productField.mainImage ||
+          // product.image can be either an attachment object or a direct URL string
+          (typeof productField.image === "string"
+            ? productField.image
+            : productField.image?.thumbnail ||
+              productField.image?.original ||
+              productField.image?.original2) ||
+          null;
+
+        if (!cancelled && candidateFromObject) {
+          setResolvedImage(candidateFromObject);
+          return;
+        }
+      }
+
+      // 3) Fallback: if product is just an ObjectId, fetch the product to resolve its image.
+      const productId =
+        typeof productField === "string" && productField
+          ? productField
+          : (item as any).productId;
+
+      if (!productId) {
+        return;
+      }
+
+      try {
+        const { data } = await http.get(
+          `${API_RESOURCES.PRODUCTS}/${productId}`
+        );
+        const rawProduct = data?.data?.product ?? data?.data ?? data;
+        const productImage =
+          rawProduct?.mainImage ||
+          (typeof rawProduct?.image === "string"
+            ? rawProduct.image
+            : rawProduct?.image?.thumbnail ||
+              rawProduct?.image?.original ||
+              rawProduct?.image?.original2) ||
+          null;
+
+        if (!cancelled && productImage) {
+          setResolvedImage(productImage);
+          return;
+        }
+      } catch {
+        // Silently fall back to placeholder on failure
+      }
+    };
+
+    resolve();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [item]);
+
+  return resolvedImage;
+};
 
 const OrderItemCard = ({ item }: { item: OrderItem }) => {
+  const hasBackendDeal =
+    typeof item.originalPrice === "number" &&
+    item.originalPrice > 0 &&
+    typeof item.dealPrice === "number" &&
+    item.dealPrice > 0 &&
+    item.dealPrice < item.originalPrice;
+
+  const unitAmount = hasBackendDeal
+    ? (item.dealPrice as number)
+    : item.price;
+
   const { price: itemTotal } = usePrice({
-    amount: item.price * item.quantity,
+    amount: unitAmount * item.quantity,
   });
 
+  const resolvedImage = useOrderItemImage(item);
+  const imageSrc = resolvedImage ?? productPlaceholder;
+
+  const hasTax =
+    typeof (item as any).tax === "number" && (item as any).tax > 0;
+
   return (
-    <div className="flex gap-3 items-center py-2">
-      <div className="flex w-12 h-12 border rounded-md border-border-base shrink-0">
+    <div className="flex gap-3 items-start py-2">
+      <div className="flex w-16 h-16 border rounded-md border-border-base shrink-0 overflow-hidden bg-gray-50">
         <Image
-          src={item?.image?.thumbnail || productPlaceholder}
+          src={imageSrc}
           alt={item.name}
-          width={48}
-          height={48}
-          className="rounded-md object-cover"
+          width={64}
+          height={64}
+          className="object-contain"
         />
       </div>
       <div className="flex-1 min-w-0">
@@ -29,6 +153,11 @@ const OrderItemCard = ({ item }: { item: OrderItem }) => {
           <span className="font-medium">{item.quantity} x </span>
           {item.name}
         </p>
+        {hasTax && (
+          <span className="text-xs text-gray-500 mt-1 block">
+            Includes {(item as any).tax}% tax
+          </span>
+        )}
       </div>
       <div className="text-brand-dark text-end shrink-0">
         <p className="font-semibold text-sm">{itemTotal}</p>
@@ -41,11 +170,45 @@ const OrderDetails: React.FC<{ order: Order; className?: string }> = ({
   order,
   className = "pt-0",
 }) => {
-  const { price: formattedSubtotal } = usePrice({ amount: order.subtotal });
+  // Derive subtotal (without tax) and total tax from order items to match checkout summary.
+  // If backend already provides order-level tax, prefer that.
+  const itemsSubtotalWithoutTax = calculateSubtotalWithoutTax(
+    order.items as unknown as any[]
+  );
+  const itemsTaxTotal = calculateTaxTotal(order.items as unknown as any[]);
+
+  const subtotalWithoutTax = itemsSubtotalWithoutTax;
+  const taxTotal =
+    typeof (order as any).taxTotal === "number"
+      ? (order as any).taxTotal
+      : typeof (order as any).tax === "number"
+      ? (order as any).tax
+      : itemsTaxTotal;
+
+  const { price: formattedSubtotal } = usePrice({ amount: subtotalWithoutTax });
+  const { price: formattedTaxTotal } = usePrice({ amount: taxTotal });
   const { price: formattedDiscount } = usePrice({ amount: order.discount });
   const { price: formattedShipping } = usePrice({ amount: order.shippingFee });
   const { price: formattedCOD } = usePrice({ amount: order.codFee || 0 });
   const { price: formattedTotal } = usePrice({ amount: order.totalAmount });
+
+  // Derive tax label like "Tax (4%)" when there is a single tax rate across items
+  const distinctTaxRates = Array.from(
+    new Set(
+      order.items
+        .map((item) =>
+          typeof (item as any).tax === "number" && (item as any).tax > 0
+            ? (item as any).tax
+            : null
+        )
+        .filter((v): v is number => v !== null)
+    )
+  );
+
+  const taxLabel =
+    taxTotal > 0 && distinctTaxRates.length === 1
+      ? `Tax (${distinctTaxRates[0]}%)`
+      : "Tax";
 
   return (
     <div
@@ -103,6 +266,14 @@ const OrderDetails: React.FC<{ order: Order; className?: string }> = ({
           <span>Subtotal</span>
           <span>{formattedSubtotal}</span>
         </div>
+
+        {/* Show tax line - will be hidden if no tax */}
+        {taxTotal > 0 && (
+          <div className="flex justify-between text-brand-dark">
+            <span>{taxLabel}</span>
+            <span>{formattedTaxTotal}</span>
+          </div>
+        )}
 
         {order.discount > 0 && (
           <div className="flex justify-between text-green-600 font-medium">

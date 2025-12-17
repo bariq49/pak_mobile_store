@@ -36,7 +36,7 @@ const ImageFill: React.FC<Props> = ({
   
   // Use placeholder if src is invalid
   const imageSrc = isValidSrc ? src : productPlaceholder;
-  
+
   const hasFullHeight = rootClassName?.includes("h-full");
   const hasAspectSquare = rootClassName?.includes("aspect-square");
 

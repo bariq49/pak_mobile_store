@@ -15,12 +15,14 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "@/utils/routes";
 import toast from "react-hot-toast";
 import { useCreateOrderMutation } from "@/services/order/order-api";
+import { useClearBuyNow } from "@/services/cart/buy-now-api";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY || "");
 
 interface CustomCardFormProps {
   addressId: string;
   metadata?: object;
+  isBuyNow?: boolean;
 }
 
 const CARD_ELEMENT_OPTIONS = {
@@ -37,12 +39,14 @@ const CARD_ELEMENT_OPTIONS = {
 const CustomCardForm: React.FC<CustomCardFormProps> = ({
   addressId,
   metadata,
+  isBuyNow = false,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [cardName, setCardName] = useState("");
   const { mutateAsync: createOrder } = useCreateOrderMutation();
+  const { mutate: clearBuyNow } = useClearBuyNow();
   const router = useRouter();
 
   const handlePayment = async (e: React.FormEvent) => {
@@ -60,6 +64,7 @@ const CustomCardForm: React.FC<CustomCardFormProps> = ({
         addressId,
         paymentMethod: "stripe",
         metadata,
+        isBuyNow: isBuyNow,
       });
 
       if (!clientSecret) throw new Error("Payment intent missing");
@@ -77,6 +82,14 @@ const CustomCardForm: React.FC<CustomCardFormProps> = ({
       if (error) throw error;
 
       if (paymentIntent?.status === "succeeded") {
+        // Clear buy-now if this was a buy-now order
+        if (isBuyNow) {
+          clearBuyNow();
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("isBuyNow");
+          }
+        }
+
         toast.success("Payment successful!");
         router.push(ROUTES.ORDER_CONFIRMATION(order._id));
       }

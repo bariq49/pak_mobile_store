@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useIsMounted } from "@/utils/use-is-mounted";
 import { useCart } from "@/hooks/use-cart";
+import { useBuyNow } from "@/hooks/use-buy-now";
 import Loading from "@/components/shared/loading";
 import { CheckoutItem } from "@/components/checkout/checkout-card-item";
 import { Loader, Trash2 } from "lucide-react";
@@ -13,7 +14,15 @@ import {
   calculateTaxTotal,
 } from "@/services/utils/cartUtils";
 
-const CheckoutCard: React.FC = () => {
+interface CheckoutCardProps {
+  isBuyNow?: boolean;
+}
+
+const CheckoutCard: React.FC<CheckoutCardProps> = ({ isBuyNow = false }) => {
+  const cartData = useCart();
+  const buyNowData = useBuyNow();
+
+  // Use buy-now data if isBuyNow is true, otherwise use cart data
   const {
     items,
     total = 0,
@@ -23,15 +32,19 @@ const CheckoutCard: React.FC = () => {
     isEmpty,
     shippingFee = 0,
     shippingMethod = "standard",
-    useCartActions,
     codFee = 0,
-  } = useCart();
+  } = isBuyNow ? buyNowData : cartData;
+
+  const useCartActions = isBuyNow
+    ? buyNowData.useBuyNowActions
+    : cartData.useCartActions;
 
   const mounted = useIsMounted();
   const [couponCode, setCouponCode] = useState("");
 
+  const actions = useCartActions();
   const { applyCoupon, removeCoupon, isApplyingCoupon, isRemovingCoupon } =
-    useCartActions();
+    actions;
 
   // Derive subtotal (without tax) and total tax from cart items
   const subtotalWithoutTax = calculateSubtotalWithoutTax(items);
@@ -73,46 +86,49 @@ const CheckoutCard: React.FC = () => {
 
   if (!mounted)
     return (
-      <div className="bg-white p-5 md:p-8 border rounded-md border-border-base">
-        <div className="flex items-center justify-between pb-4 mb-5 border-b border-border-base">
-          <h2 className="text-lg font-medium text-brand-dark">Order Summary</h2>
+      <div className="bg-white">
+        <div className="pb-4 mb-5">
+          <h2 className="text-xl font-normal text-brand-dark">Your cart</h2>
         </div>
         <Loading />
       </div>
     );
 
   return (
-    <div className="bg-white p-5 md:p-8 border rounded-lg">
-      <h2 className="text-lg font-semibold text-brand-dark mb-5">
-        Order Summary
+    <div className="bg-white">
+      <h2 className="text-xl font-normal text-brand-dark mb-6">
+        Your order summary
       </h2>
       <div
-        className={`space-y-4 pb-5 ${
-          items.length > 2 ? "max-h-60 overflow-y-auto pr-2" : ""
+        className={`space-y-4 pb-6 ${
+          items.length > 2 ? "max-h-96 overflow-y-auto pr-2" : ""
         }`}
       >
         {isEmpty ? (
-          <p className="py-4 text-center text-brand-muted">
-            Your cart is empty.
+          <p className="py-8 text-center text-brand-muted text-base">
+            Your order summary is empty.
           </p>
         ) : (
           items.map((item, index) => (
-            <CheckoutItem item={item} key={item.id ?? index} />
+            <CheckoutItem
+              item={item}
+              key={`${item.id}-${item.variationId || ""}-${index}`}
+            />
           ))
         )}
       </div>
 
       {!isEmpty && (
         <>
-          <div className="space-y-3 mb-5 pt-5 border-t border-border-base">
-            <h3 className="text-brand-dark mb-2 font-medium">Coupon</h3>
+          <div className="space-y-3 mb-6 pt-6 border-t border-gray-200">
+            <h3 className="text-brand-dark mb-3 font-normal text-base">Coupon</h3>
             {coupon ? (
-              <div className="flex justify-between items-center p-4 rounded-lg border border-border-base">
+              <div className="flex justify-between items-center p-3 rounded border border-gray-200 bg-gray-50">
                 <div>
-                  <span className="text-green-700 font-medium">
+                  <span className="text-green-700 font-normal text-sm">
                     Applied: {coupon.code}
                   </span>
-                  <p className="text-green-700 text-sm">
+                  <p className="text-green-700 text-xs mt-1">
                     Discount:{" "}
                     {coupon.discountType === "percentage"
                       ? `${coupon.discountValue}%`
@@ -120,14 +136,14 @@ const CheckoutCard: React.FC = () => {
                   </p>
                 </div>
                 <button
-                  className="text-red-600 hover:text-red-800 flex items-center justify-center"
+                  className="text-red-600 hover:text-red-800 flex items-center justify-center p-1"
                   onClick={handleRemove}
                   disabled={isRemovingCoupon}
                 >
                   {isRemovingCoupon ? (
-                    <Loader className="w-5 h-5 animate-spin" />
+                    <Loader className="w-4 h-4 animate-spin" />
                   ) : (
-                    <Trash2 className="w-5 h-5" />
+                    <Trash2 className="w-4 h-4" />
                   )}
                 </button>
               </div>
@@ -143,7 +159,7 @@ const CheckoutCard: React.FC = () => {
                 <button
                   onClick={handleApply}
                   disabled={isApplyingCoupon}
-                  className="px-4 py-2 bg-black text-white rounded-md flex items-center justify-center gap-2"
+                  className="px-4 py-2 bg-black text-white rounded flex items-center justify-center gap-2 text-sm font-normal"
                 >
                   {isApplyingCoupon ? (
                     <Loader className="w-4 h-4 animate-spin" />
@@ -155,64 +171,61 @@ const CheckoutCard: React.FC = () => {
             )}
           </div>
 
-          <div className="space-y-2 mb-4">
-            <div className="flex justify-between text-brand-dark">
-              <span>Subtotal</span>
-              <span>{formattedSubtotal}</span>
-            </div>
-
-            {/* Show tax line - will be hidden if taxTotal is 0 */}
-            {taxTotal > 0 ? (
-              <div className="flex justify-between text-brand-dark text-sm">
-                <span>{taxLabel}</span>
-                <span>{formattedTaxTotal}</span>
+          <div className="pt-6 border-t border-gray-200">
+            <h3 className="text-lg font-normal text-brand-dark mb-4">Estimated total</h3>
+            <div className="space-y-3 mb-4">
+              <div className="flex justify-between text-brand-dark text-base">
+                <span>Subtotal</span>
+                <span>{formattedSubtotal}</span>
               </div>
-            ) : (
-              // Debug: Show when taxTotal is 0 to verify calculation
-              process.env.NODE_ENV === "development" && (
-                <div className="flex justify-between text-gray-400 text-xs italic">
-                  <span>Tax (debug: {taxTotal})</span>
-                  <span>No tax applied</span>
+
+              {/* Show tax line - will be hidden if taxTotal is 0 */}
+              {taxTotal > 0 && (
+                <div className="flex justify-between text-brand-dark text-base">
+                  <span>{taxLabel}</span>
+                  <span>{formattedTaxTotal}</span>
                 </div>
-              )
-            )}
+              )}
 
-            {discount > 0 && (
-              <div className="flex justify-between text-green-600 font-medium">
-                <span>Discount</span>
-                <span>- {formattedDiscount}</span>
-              </div>
-            )}
+              {discount > 0 && (
+                <div className="flex justify-between text-green-600 text-base">
+                  <span>Discount</span>
+                  <span>- {formattedDiscount}</span>
+                </div>
+              )}
 
-            <div className="flex justify-between text-brand-dark">
-              <span>
-                Shipping{" "}
-                {shippingMethod && (
-                  <span className="text-sm text-gray-500">
-                    ({shippingMethod})
-                  </span>
-                )}
-              </span>
-              {shippingFee > 0 ? (
-                <span>+ {formattedShipping}</span>
-              ) : (
-                <span className="text-green-600 font-medium">
-                  Free Shipping
+              <div className="flex justify-between text-brand-dark text-base">
+                <span>
+                  Shipping
+                  {shippingMethod && (
+                    <span className="text-sm text-gray-500 ml-1">
+                      ({shippingMethod})
+                    </span>
+                  )}
                 </span>
+                {shippingFee > 0 ? (
+                  <span>+ {formattedShipping}</span>
+                ) : (
+                  <span className="text-green-600">Free</span>
+                )}
+              </div>
+
+              {codFee > 0 && (
+                <div className="flex justify-between text-brand-dark text-base">
+                  <span>COD Fee</span>
+                  <span>+ {formattedCOD}</span>
+                </div>
               )}
             </div>
 
-            {codFee > 0 && (
-              <div className="flex justify-between text-brand-dark font-medium">
-                <span>COD Fee</span>
-                <span>+ {formattedCOD}</span>
-              </div>
-            )}
-          </div>
+            <p className="text-sm text-gray-500 mb-4">
+              Taxes, discounts and shipping calculated at checkout.
+            </p>
 
-          <div className="flex justify-between font-bold text-lg pt-6 border-t ">
-            <span>Total</span>
-            <span>{formattedTotal}</span>
+            <div className="flex justify-between font-semibold text-lg pt-4 border-t border-gray-200">
+              <span>Total</span>
+              <span>{formattedTotal}</span>
+            </div>
           </div>
         </>
       )}

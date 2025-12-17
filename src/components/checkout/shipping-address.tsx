@@ -4,23 +4,25 @@ import React, { useEffect, useState } from "react";
 import {
   Plus,
   MapPin,
-  Home,
-  Phone,
   Check,
   Loader,
   Trash2,
   Pencil,
-  Building2,
+  X,
 } from "lucide-react";
-import Button from "@/components/shared/button";
 import Loading from "@/components/shared/loading";
 import {
   useAddressesQuery,
   useDeleteAddressMutation,
+  useAddAddressMutation,
+  useUpdateAddressMutation,
   Address,
 } from "@/services/customer/address-api";
-import { useModal } from "@/hooks/use-modal";
 import IconButton from "../shared/Icon-Button";
+import Input from "@/components/shared/form/input";
+import { useForm } from "react-hook-form";
+import { RadioGroup, RadioGroupItem } from "@/components/shared/radio-group";
+import { Checkbox } from "../shared/form/checkbox";
 
 interface ShippingAddressProps {
   onComplete: (data: Address & { selectedAddressId?: string }) => void;
@@ -29,12 +31,15 @@ interface ShippingAddressProps {
 const ShippingAddress: React.FC<ShippingAddressProps> = ({ onComplete }) => {
   const { data: addresses = [], isLoading } = useAddressesQuery();
   const deleteMutation = useDeleteAddressMutation();
-  const { openModal } = useModal();
+  const addAddressMutation = useAddAddressMutation();
+  const updateAddressMutation = useUpdateAddressMutation();
 
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null
   );
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   useEffect(() => {
     if (addresses.length > 0 && !selectedAddressId) {
       const defaultAddress = addresses.find((a: any) => a.isDefault);
@@ -63,13 +68,252 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ onComplete }) => {
     });
   };
 
-  const getAddressIcon = (label: string) => {
-    if (!label) return <Home className="w-4 h-4 text-primary-500" />;
-    const normalized = label.toLowerCase();
-    if (normalized.includes("office") || normalized.includes("work")) {
-      return <Building2 className="w-4 h-4 text-primary-500" />;
-    }
-    return <Home className="w-4 h-4 text-primary-500" />;
+  const handleAddNew = () => {
+    setEditingAddress(null);
+    setShowForm(true);
+  };
+
+  const handleEdit = (address: Address) => {
+    setEditingAddress(address);
+    setShowForm(true);
+  };
+
+  const handleCancelForm = () => {
+    setShowForm(false);
+    setEditingAddress(null);
+  };
+
+  // Inline Address Form Component
+  const AddressFormInline = () => {
+    const [addressType, setAddressType] = useState(editingAddress?.label || "Home");
+    const [isDefault, setIsDefault] = useState(editingAddress?.isDefault || false);
+
+    const {
+      register,
+      handleSubmit,
+      reset,
+      formState: { errors },
+    } = useForm<Address>();
+
+    useEffect(() => {
+      if (editingAddress) {
+        reset(editingAddress);
+        setAddressType(editingAddress.label || "Home");
+        setIsDefault(editingAddress.isDefault || false);
+      } else {
+        reset({
+          country: "",
+          state: "",
+          city: "",
+          area: "",
+          streetAddress: "",
+          apartment: "",
+          postalCode: "",
+          fullName: "",
+          phoneNumber: "",
+        });
+        setAddressType("Home");
+        setIsDefault(false);
+      }
+    }, [editingAddress, reset]);
+
+    const onSubmit = (input: Address) => {
+      const payload = {
+        ...input,
+        label: addressType,
+        isDefault,
+      };
+
+      if (editingAddress?._id) {
+        updateAddressMutation.mutate(
+          { addressId: editingAddress._id, input: payload },
+          {
+            onSuccess: () => {
+              setShowForm(false);
+              setEditingAddress(null);
+            },
+          }
+        );
+      } else {
+        addAddressMutation.mutate(payload, {
+          onSuccess: () => {
+            setShowForm(false);
+            setEditingAddress(null);
+          },
+        });
+      }
+    };
+
+    return (
+      <div className="border border-gray-200 rounded p-5 bg-white mt-3">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-normal text-brand-dark">
+            {editingAddress ? "Edit Address" : "Add New Address"}
+          </h3>
+          <button
+            onClick={handleCancelForm}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Full Name"
+              className="w-full"
+              {...register("fullName", { required: "Full name is required" })}
+              variant="solid"
+              error={errors.fullName?.message}
+            />
+            <Input
+              label="Phone Number"
+              className="w-full"
+              {...register("phoneNumber", {
+                required: "Phone number is required",
+                pattern: {
+                  value: /^[0-9+\-() ]+$/,
+                  message: "Enter a valid phone number",
+                },
+              })}
+              variant="solid"
+              error={errors.phoneNumber?.message}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Country"
+              className="w-full"
+              {...register("country", { required: "Country is required" })}
+              variant="solid"
+              error={errors.country?.message}
+            />
+            <Input
+              label="State"
+              className="w-full"
+              {...register("state", { required: "State is required" })}
+              variant="solid"
+              error={errors.state?.message}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="City"
+              className="w-full"
+              {...register("city", { required: "City is required" })}
+              variant="solid"
+              error={errors.city?.message}
+            />
+            <Input
+              label="Area / Locality"
+              className="w-full"
+              {...register("area", { required: "Area is required" })}
+              variant="solid"
+              error={errors.area?.message}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Apartment / Suite"
+              className="w-full"
+              {...register("apartment")}
+              variant="solid"
+            />
+            <Input
+              label="Postal Code"
+              {...register("postalCode", {
+                required: "Postal code is required",
+              })}
+              variant="solid"
+              error={errors.postalCode?.message}
+            />
+          </div>
+
+          <Input
+            label="Street Address"
+            className="w-full"
+            {...register("streetAddress", {
+              required: "Street Address is required",
+            })}
+            variant="solid"
+            error={errors.streetAddress?.message}
+          />
+
+          <div className="mt-4">
+            <RadioGroup
+              value={addressType}
+              onValueChange={setAddressType}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Home" id="r1" />
+                <label
+                  htmlFor="r1"
+                  className="text-sm font-medium text-brand-dark"
+                >
+                  Home <span className="font-light">(All Day Delivery)</span>
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Office" id="r2" />
+                <label
+                  htmlFor="r2"
+                  className="text-sm font-medium text-brand-dark"
+                >
+                  Office{" "}
+                  <span className="font-light">(Delivery 9 AM - 5 PM)</span>
+                </label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          <div className="mt-4 flex items-center space-x-2">
+            <Checkbox
+              id="defaultAddress"
+              checked={isDefault}
+              onCheckedChange={(val: any) => setIsDefault(!!val)}
+            />
+            <label
+              htmlFor="defaultAddress"
+              className="text-sm font-medium text-brand-dark"
+            >
+              Set as default address
+            </label>
+          </div>
+
+          <div className="flex gap-3 mt-6">
+            <button
+              type="button"
+              onClick={handleCancelForm}
+              className="px-6 py-2 border border-gray-300 rounded-md font-medium text-base text-brand-dark hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={addAddressMutation.isPending || updateAddressMutation.isPending}
+              className={`px-6 py-2 rounded-md font-medium text-base transition-all ${
+                addAddressMutation.isPending || updateAddressMutation.isPending
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-black text-white hover:bg-gray-800 cursor-pointer"
+              }`}
+            >
+              {addAddressMutation.isPending || updateAddressMutation.isPending ? (
+                <Loader className="w-4 h-4 animate-spin inline" />
+              ) : editingAddress ? (
+                "Update Address"
+              ) : (
+                "Save Address"
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    );
   };
 
   if (isLoading) {
@@ -83,48 +327,60 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ onComplete }) => {
   return (
     <div className="w-full">
       {addresses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="space-y-3">
           {addresses.map((address: any) => (
             <div
               key={address._id}
               onClick={() => handleAddressSelect(address._id)}
-              className={`relative border rounded-xl shadow-sm p-6 cursor-pointer transition-all duration-200 flex flex-col justify-between ${
+              className={`relative border rounded p-4 cursor-pointer transition-all duration-200 ${
                 selectedAddressId === address._id
-                  ? "border-primary-500 ring-2 ring-primary-500/30 bg-primary-500/5"
-                  : "border-border hover:border-primary-500/40"
+                  ? "border-black bg-gray-50"
+                  : "border-gray-200 hover:border-gray-300"
               }`}
             >
-              {selectedAddressId === address._id && (
-                <div className="absolute top-1 right-1 w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center shadow">
-                  <Check className="w-3.5 h-3.5 text-white" />
-                </div>
-              )}
-
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  {getAddressIcon(address.label)}
-                  <span className="font-semibold text-sm capitalize">
-                    {address.label || "Address"}
-                  </span>
-                  {address.isDefault && (
-                    <span className="px-3 py-1 text-xs font-medium rounded-full bg-primary-500 text-brand-light">
-                      Default
-                    </span>
+              <div className="flex items-start gap-3">
+                <div className={`mt-1 w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                  selectedAddressId === address._id
+                    ? "border-black bg-black"
+                    : "border-gray-300"
+                }`}>
+                  {selectedAddressId === address._id && (
+                    <Check className="w-2.5 h-2.5 text-white" />
                   )}
                 </div>
-
-                <div className="flex items-center gap-1">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-medium text-base text-brand-dark capitalize">
+                      {address.fullName}
+                    </span>
+                    {address.isDefault && (
+                      <span className="px-2 py-0.5 text-xs font-normal rounded bg-gray-200 text-gray-700">
+                        Default
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed mb-1">
+                    {`${address.streetAddress}${
+                      address.apartment ? `, ${address.apartment}` : ""
+                    }, ${address.area}, ${address.city}, ${address.state}, ${
+                      address.postalCode
+                    }, ${address.country}`}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {address.phoneNumber}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 flex-shrink-0">
                   <IconButton
                     size="sm"
                     tooltip="Edit Address"
                     onClick={(e) => {
                       e.stopPropagation();
-                      openModal("ADDRESS_BOOK", address);
+                      handleEdit(address);
                     }}
                   >
                     <Pencil className="w-4 h-4" />
                   </IconButton>
-
                   <IconButton
                     variant="destructive"
                     size="sm"
@@ -143,91 +399,67 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ onComplete }) => {
                   </IconButton>
                 </div>
               </div>
-
-              <div className="mb-4 rounded-lg">
-                <h4 className="text-sm font-semibold text-card-foreground mb-2">
-                  Contact Information
-                </h4>
-                <div className="grid grid-cols-1 gap-2">
-                  <div className="flex items-center gap-2">
-                    <Home className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-sm font-medium text-card-foreground capitalize">
-                      {address.fullName}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-sm text-card-foreground">
-                      {address.phoneNumber}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <h4 className="text-sm font-semibold text-card-foreground">
-                  Address Details
-                </h4>
-                <p className="text-sm text-card-foreground leading-normal mb-0">
-                  {`${address.streetAddress}${
-                    address.apartment ? `, ${address.apartment}` : ""
-                  }, ${address.area}, ${address.city}, ${address.state}, ${
-                    address.postalCode
-                  }, ${address.country}`}
-                </p>
-              </div>
             </div>
           ))}
 
           {/* Add New Address Card */}
-          <button
-            onClick={() => openModal("ADDRESS_BOOK")}
-            className="group flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl min-h-[300px] hover:border-primary/50 hover:bg-muted/20 transition-all duration-200"
-          >
-            <div className="p-4 rounded-full bg-primary-500 group-hover:bg-primary-400 transition-colors duration-200 mb-3">
-              <Plus className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-card-foreground mb-1">
-              Add New Address
-            </span>
-            <span className="text-xs text-muted-foreground">
-              Click to add a shipping address
-            </span>
-          </button>
+          {!showForm && (
+            <button
+              onClick={handleAddNew}
+              className="group flex items-center gap-3 border-2 border-dashed border-gray-300 rounded p-4 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 w-full"
+            >
+              <Plus className="w-5 h-5 text-gray-400 group-hover:text-gray-600" />
+              <span className="text-sm font-normal text-gray-600 group-hover:text-gray-800">
+                Add New Address
+              </span>
+            </button>
+          )}
+
+          {/* Inline Address Form */}
+          {showForm && <AddressFormInline />}
         </div>
       ) : (
-        <div className="text-center py-10 border border-dashed border-border rounded-xl">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-muted rounded-full">
-              <MapPin className="w-6 h-6 text-muted-foreground" />
+        <>
+          {!showForm ? (
+            <div className="text-center py-10 border border-dashed border-gray-300 rounded">
+              <div className="flex justify-center mb-4">
+                <div className="p-3 bg-gray-100 rounded-full">
+                  <MapPin className="w-6 h-6 text-gray-400" />
+                </div>
+              </div>
+              <h3 className="text-lg font-medium text-brand-dark mb-2">
+                No saved addresses
+              </h3>
+              <p className="text-sm text-gray-500 mb-4">
+                Add your first shipping address
+              </p>
+              <button
+                onClick={handleAddNew}
+                className="inline-flex items-center gap-2 px-6 py-2 bg-black text-white rounded-md font-medium hover:bg-gray-800"
+              >
+                <Plus className="w-4 h-4" />
+                Add Address
+              </button>
             </div>
-          </div>
-          <h3 className="text-lg font-medium text-card-foreground mb-2">
-            No saved addresses
-          </h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Add your first shipping address
-          </p>
-          <Button
-            onClick={() => openModal("ADDRESS_BOOK")}
-            variant="primary"
-            className="inline-flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Add Address
-          </Button>
-        </div>
+          ) : (
+            <AddressFormInline />
+          )}
+        </>
       )}
 
       {addresses.length > 0 && (
         <div className="flex items-center justify-end gap-3 mt-6">
-          <Button
+          <button
             onClick={handleContinue}
             disabled={!selectedAddressId}
-            variant="primary"
+            className={`px-6 py-3 rounded-md font-medium text-base transition-all ${
+              selectedAddressId
+                ? "bg-black text-white hover:bg-gray-800 cursor-pointer"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
           >
-            Use This Address
-          </Button>
+            Continue
+          </button>
         </div>
       )}
     </div>

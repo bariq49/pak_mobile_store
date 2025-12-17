@@ -759,11 +759,14 @@ button.yarl__thumbnails_thumbnail_active {
 
     .product-cart-button {
         width: 100%;
+        max-width: 200px;
         z-index: 10;
         position: absolute;
-        bottom: -55px;
-        left: 0;
-        right: 0;
+        bottom: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        visibility: hidden;
         transition: all .4s ease-in-out;
     }
 
@@ -793,6 +796,7 @@ button.yarl__thumbnails_thumbnail_active {
 
         &.card-image--jump .product-cart-button {
             opacity: 1;
+            visibility: visible;
             bottom: 3px;
         }
 

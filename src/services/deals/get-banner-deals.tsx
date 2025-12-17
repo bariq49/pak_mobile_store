@@ -9,6 +9,10 @@ export interface DealProduct {
   price: number;
   sale_price?: number;
   discountedPrice?: number;
+  /** Backend-computed original (effective) unit price before any deal, used for strike-through and subtotals. */
+  originalPrice?: number | null;
+  /** Backend-computed deal unit price when a deal is applied; null or >= originalPrice when no active deal. */
+  dealPrice?: number | null;
 }
 
 export interface Deal {
