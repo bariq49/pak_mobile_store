@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://pak-mobile-store-backend.vercel.app";
 
 export const API_RESOURCES = {
   // Categories & Products
