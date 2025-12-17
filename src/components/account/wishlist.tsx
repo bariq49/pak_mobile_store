@@ -26,10 +26,10 @@ export default function Wishlist() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-1.5 md:gap-5">
               {wishlistList.map((item: any) => (
                 <ProductCard
-                  key={`wishlist-${item.product.id}`}
-                  product={item.product}
+                  key={`wishlist-${item?.product?.id}`}
+                  product={item?.product ?? {}}
                   removeWishlist={() =>
-                    handleRemoveFromWishlist(item.product.id)
+                    handleRemoveFromWishlist(item?.product?.id)
                   }
                 />
               ))}

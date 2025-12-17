@@ -39,7 +39,7 @@ const AddToCart = ({ data, variation, disabled, className }: Props) => {
   return (
     <button
       className={cn(
-        "min-w-[150px] px-4 py-2 flex relative leading-6 font-medium text-brand-light rounded-full text-[13px] items-center justify-center transition-all bg-primary-500 hover:bg-primary-400",
+        "w-full px-3 py-1.5 flex relative leading-5 font-medium text-brand-light rounded-full text-xs items-center justify-center transition-all bg-primary-500 hover:bg-primary-400",
         className,
         {
           "sm:text-white/30": addToCartLoader,

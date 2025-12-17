@@ -35,6 +35,7 @@ export const API_RESOURCES = {
   ADD_WISHLIST: `${BASE_URL}/api/v1/wishlist/add`,
   REMOVE_WISHLIST: `${BASE_URL}/api/v1/wishlist/remove`,
   CART: `${BASE_URL}/api/v1/cart`,
+  BUY_NOW: `${BASE_URL}/api/v1/buy-now`,
 
   // Mock/Static JSON files (for testing/demo)
   PRODUCT: "/product.json",

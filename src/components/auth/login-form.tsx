@@ -127,20 +127,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ className, isPopup = true }) => {
             </div>
           </form>
 
-          {/* Social logins */}
-          <div className="flex justify-center mt-10 space-x-2.5">
-            {[FaFacebook, FaTiktok, FaXTwitter, FaInstagram].map(
-              (Icon, idx) => (
-                <button
-                  key={idx}
-                  className="flex items-center justify-center w-10 h-10 border rounded-full border-gray-300 hover:border-primary focus:outline-none group"
-                  onClick={() => handleSocialLogin(isPopup)}
-                >
-                  <Icon className="w-4 h-4 text-gray-500 group-hover:text-primary" />
-                </button>
-              )
-            )}
-          </div>
+        
 
           {/* Footer */}
           <div className="mt-5 mb-3 text-sm text-center text-body">

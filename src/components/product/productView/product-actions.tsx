@@ -7,6 +7,7 @@ import CompareButton from "@/components/compare/compare-button";
 import PaypalIconLabel from "@/components/icons/payment/paypal-text";
 import { useUI } from "@/hooks/use-UI";
 import { useModal } from "@/hooks/use-modal";
+import { useBuyNow } from "@/hooks/use-buy-now";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 
@@ -36,6 +37,8 @@ const ProductActions: React.FC<ProductActionsProps> = ({
 
   const { isAuthorized } = useUI();
   const { openModal } = useModal();
+  const { useBuyNowActions } = useBuyNow();
+  const { buyNow, buyNowLoader } = useBuyNowActions(data, selectedVariation);
 
   const handleAddToCart = () => {
     if (!isAuthorized) {
@@ -44,6 +47,19 @@ const ProductActions: React.FC<ProductActionsProps> = ({
       return;
     }
     addToCart();
+  };
+
+  const handleBuyNow = () => {
+    if (!isAuthorized) {
+      openModal("LOGIN_VIEW");
+      toast.error("Please login to buy now");
+      return;
+    }
+    if (!isSelected) {
+      toast.error("Please select product options");
+      return;
+    }
+    buyNow();
   };
 
   return (
@@ -65,6 +81,19 @@ const ProductActions: React.FC<ProductActionsProps> = ({
             </>
           )}
         </Button>
+
+        <button
+          className="flex-auto px-1.5 h-12 bg-white hover:bg-gray-50 text-brand-dark tracking-widest rounded-md font-medium text-15px leading-4 inline-flex items-center transition ease-in-out duration-300 font-body text-center justify-center border border-border-base shadow-sm hover:shadow-md disabled:bg-gray-100 disabled:text-gray-400 disabled:hover:bg-gray-100 disabled:cursor-not-allowed disabled:border-gray-300"
+          onClick={handleBuyNow}
+          disabled={!isSelected || outOfStock || addToCartLoader || buyNowLoader}
+          aria-label="Buy Now Button"
+        >
+          {buyNowLoader ? (
+            <Loader className="w-4 h-4 animate-spin" />
+          ) : (
+            "Buy Now"
+          )}
+        </button>
 
         <div className="grid grid-cols-2 gap-2.5 lg:w-[140px]">
           <WishlistButton product={data} />

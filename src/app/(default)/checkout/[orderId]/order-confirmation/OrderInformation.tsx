@@ -26,6 +26,23 @@ export default function OrderInformation() {
   const { data, isLoading } = useOrderQuery(orderId);
   const order = data?.order;
 
+  if (typeof window !== "undefined") {
+    console.log("Order API raw response:", data);
+    console.log("Normalized order object passed to UI:", order);
+    if (order) {
+      console.log("Order monetary fields:", {
+        subtotal: order.subtotal,
+        shippingFee: order.shippingFee,
+        discount: order.discount,
+        codFee: order.codFee,
+        totalAmount: order.totalAmount,
+        tax: (order as any).tax,
+        taxTotal: (order as any).taxTotal,
+      });
+      console.log("Order first item for debugging:", order.items?.[0]);
+    }
+  }
+
   if (isLoading) return <Loading />;
 
   return (

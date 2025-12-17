@@ -8,12 +8,22 @@ export interface Item {
   stock?: number;
   /** Optional tax percentage from backend, e.g. 2, 4, 21 */
   tax?: number | null;
+  /** Backend-computed original (effective) unit price before any deal, used for strike-through and subtotals. */
+  originalPrice?: number | null;
+  /** Backend-computed deal unit price when a deal is applied; null or >= originalPrice when no active deal. */
+  dealPrice?: number | null;
   /** Computed per-item base total (price * quantity, without tax) */
   itemBaseTotal?: number;
   /** Computed per-item tax total */
   itemTaxTotal?: number;
   /** Computed per-item grand total (base + tax) */
   itemTotal?: number;
+  /** Backend cart item identifier (most reliable for removal) */
+  _id?: string | number;
+  /** Backend product ID */
+  productId?: string | number;
+  /** Backend variant ID (for variable products) */
+  variantId?: string | number;
   [key: string]: any;
 }
 
@@ -138,7 +148,24 @@ export function calculateProductTotalsWithTax(
 /** Helper to get tax-aware totals for a full cart item */
 function getItemTotals(item: Item) {
   const quantity = item.quantity ?? 1;
-  return calculateProductTotalsWithTax(item.price, quantity, item.tax);
+  
+  // Check if dealPrice exists and is valid (not null, > 0, and < originalPrice)
+  const hasBackendDeal =
+    typeof item.originalPrice === "number" &&
+    item.originalPrice > 0 &&
+    typeof item.dealPrice === "number" &&
+    item.dealPrice !== null &&
+    item.dealPrice > 0 &&
+    item.dealPrice < item.originalPrice;
+
+  // Use dealPrice if valid, otherwise use originalPrice, fallback to price
+  const effectivePrice = hasBackendDeal && typeof item.dealPrice === "number"
+    ? item.dealPrice
+    : (typeof item.originalPrice === "number" && item.originalPrice > 0
+        ? item.originalPrice
+        : item.price);
+
+  return calculateProductTotalsWithTax(effectivePrice, quantity, item.tax);
 }
 
 export const calculateItemTotals = (items: Item[]) =>

@@ -33,31 +33,12 @@ const Copyright: React.FC<CopyrightProps> = ({ payment }) => {
             &nbsp; All rights reserved
           </p>
 
-          {payment && (
-            <ul className="flex flex-wrap justify-center items-center space-x-2">
-              {payment?.map((item) => (
-                <li
-                  className="transition hover:opacity-80 inline-flex"
-                  key={`payment-list--key${item.id}`}
-                >
-                  <a
-                    href={item.path ? item.path : "/#"}
-                    target="_blank"
-                    className="inline-flex"
-                    rel="noreferrer"
-                  >
-                    <Image
-                      className="scale-85"
-                      src={item.image}
-                      alt={item.name}
-                      width={item.width}
-                      height={item.height}
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
+          <p className="mt-3 md:mt-0 text-sm leading-7 lg:leading-[27px] text-brand-light/70">
+            Developed by{" "}
+            <span className="font-semibold text-brand-light">
+              TheDevSquare
+            </span>
+          </p>
         </div>
       </Container>
     </div>

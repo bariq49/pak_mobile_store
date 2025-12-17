@@ -75,6 +75,7 @@ const ProductView: React.FC<ViewProps> = ({ data, className,variant,useVariation
 				setCartVisible={setCartVisible}
 				targetButtonRef={targetButtonRef}
 				isSelected={isSelected}
+				selectedVariation={selectedVariation}
 			/>
 		</div>
 	);
