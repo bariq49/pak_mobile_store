@@ -25,6 +25,10 @@ export const API_RESOURCES = {
   FORGOT_PASSWORD: `${BASE_URL}/auth/forgot-password`,
   RESET_PASSWORD: `${BASE_URL}/auth/reset-password`,
 
+  // Contact
+  CONTACT_SUBMIT: `${BASE_URL}/api/v1/contact`,
+  CONTACT_STATUS: `${BASE_URL}/api/v1/contact/status`,
+
   // Reviews & Votes
   REVIEWS: `${BASE_URL}/api/v1/products`,
   VOTE: `${BASE_URL}/api/v1/products/reviews`,

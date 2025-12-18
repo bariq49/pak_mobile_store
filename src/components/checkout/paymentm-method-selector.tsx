@@ -77,7 +77,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
         }
       }
 
-      toast.success("Order placed successfully (Cash on Delivery)");
+      toast.success("✓ Order placed successfully (Cash on Delivery). It may take 5 to 10 minutes to receive the confirmation email.");
       router.push(ROUTES.ORDER_CONFIRMATION(order._id));
     } catch (err: any) {
       toast.error(err.message || "Failed to place order");

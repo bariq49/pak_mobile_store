@@ -2,7 +2,7 @@ import React from "react";
 import { Product } from "@/services/types";
 import { usePanel } from "@/hooks/use-panel";
 import { colorMap } from "@/data/color-settings";
-import { useDealAwarePrice } from "@/utils/pricing";
+import { useProductPricing } from "@/utils/pricing";
 import usePrice from "@/services/product/use-price";
 
 interface ProductPricingProps {
@@ -22,16 +22,15 @@ const ProductPricing: React.FC<ProductPricingProps> = ({ product }) => {
   } = product;
   const { selectedColor } = usePanel();
 
-  const dealPricing = useDealAwarePrice({
-    originalPrice:
-      typeof originalPrice === "number" && originalPrice > 0
-        ? originalPrice
-        : sale_price ?? price,
+  const productPricing = useProductPricing({
+    originalPrice: originalPrice ?? null,
     dealPrice: dealPrice ?? null,
+    price: price ?? null,
+    sale_price: sale_price ?? null,
   });
 
-  const unitPrice = dealPricing.price;
-  const unitBasePrice = dealPricing.basePrice;
+  const unitPrice = productPricing.price;
+  const unitBasePrice = productPricing.basePrice;
 
   // Calculate min/max prices from variants if not present or zero
   let calculatedMinPrice = min_price;
@@ -81,16 +80,16 @@ const ProductPricing: React.FC<ProductPricingProps> = ({ product }) => {
   });
 
   return (
-    <div className="space-s-2 mt-2 mb-4">
+    <div className="flex flex-wrap items-center gap-1.5 mt-2 mb-4">
       <span
-        className={`${colorMap[selectedColor].text} inline-block font-medium`}
+        className={`${colorMap[selectedColor].text} inline-block font-medium text-sm sm:text-base`}
       >
         {product_type === "variable"
           ? `${minPrice} - ${maxPrice}`
           : unitPrice}
       </span>
       {unitBasePrice && (
-        <del className="mx-1 text-gray-400 text-opacity-70">
+        <del className="text-xs sm:text-sm text-gray-400 text-opacity-70">
           {unitBasePrice}
         </del>
       )}

@@ -15,6 +15,7 @@ import { useUI } from "@/hooks/use-UI";
 import { useModal } from "@/hooks/use-modal";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
+import { useProductPricing } from "@/utils/pricing";
 
 interface Props {
     product?: Product;
@@ -32,10 +33,16 @@ const StickyCart: React.FC<Props> = ({ product, addToCartLoader, handleAddToCart
     const { buyNow, buyNowLoader } = useBuyNowActions(product, selectedVariation);
     const { isAuthorized } = useUI();
     const { openModal } = useModal();
-    const { price, basePrice } = usePrice({
-      amount: product?.sale_price ?? product?.price ?? 0,
-      baseAmount: product?.price ?? undefined,
+    
+    const productPricing = useProductPricing({
+      originalPrice: product?.originalPrice ?? null,
+      dealPrice: product?.dealPrice ?? null,
+      price: product?.price ?? null,
+      sale_price: product?.sale_price ?? product?.salePrice ?? null,
     });
+    
+    const price = productPricing.price;
+    const basePrice = productPricing.basePrice;
 
     // Calculate min/max prices from variants if not present or zero
     let calculatedMinPrice = product?.min_price;
@@ -123,15 +130,15 @@ const StickyCart: React.FC<Props> = ({ product, addToCartLoader, handleAddToCart
                             >
                                 {product.name}
                             </Link>
-                            <div className="space-s-2 mt-1">
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1">
                             <span
-                                className={cn(colorMap[selectedColor].text, "inline-block font-medium")}>
+                                className={cn(colorMap[selectedColor].text, "inline-block font-medium text-sm sm:text-base")}>
                                 {product.product_type === 'variable'
                                     ? `${minPrice} - ${maxPrice}`
                                     : price}
                             </span>
                                 {basePrice && (
-                                    <del className="mx-1 text-gray-400 text-opacity-70">
+                                    <del className="text-xs sm:text-sm text-gray-400 text-opacity-70">
                                         {basePrice}
                                     </del>
                                 )}

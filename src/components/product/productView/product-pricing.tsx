@@ -5,7 +5,7 @@ import { usePanel } from "@/hooks/use-panel";
 import { colorMap } from "@/data/color-settings";
 import cn from "classnames";
 import usePrice from "@/services/product/use-price";
-import { useDealAwarePrice } from "@/utils/pricing";
+import { useProductPricing } from "@/utils/pricing";
 
 interface ProductPricingProps {
   data: Product;
@@ -24,12 +24,11 @@ const ProductPricing: React.FC<ProductPricingProps> = ({
     data.variations && Array.isArray(data.variations) && data.variations.length > 0;
   const hasAnyVariants = hasVariants || hasVariations;
 
-  const dealPricing = useDealAwarePrice({
-    originalPrice:
-      typeof data.originalPrice === "number" && data.originalPrice > 0
-        ? data.originalPrice
-        : data.sale_price || data.salePrice || data.price,
+  const productPricing = useProductPricing({
+    originalPrice: data.originalPrice ?? null,
     dealPrice: data.dealPrice ?? null,
+    price: data.price ?? null,
+    sale_price: data.sale_price ?? data.salePrice ?? null,
   });
 
   // Calculate min/max prices from variants if not present on product
@@ -74,23 +73,23 @@ const ProductPricing: React.FC<ProductPricingProps> = ({
   return (
     <div className={"pb-3 lg:pb-5"}>
       {!hasAnyVariants ? (
-        <div className="flex items-center mt-5">
+        <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-5">
           <div
             className={cn(
               colorMap[selectedColor].text,
               "font-medium text-base md:text-xl xl:text-2xl"
             )}
           >
-            {dealPricing.price}
+            {productPricing.price}
           </div>
-          {dealPricing.basePrice && (
+          {productPricing.basePrice && (
             <>
-              <del className="text-sm text-opacity-50 md:text-15px ltr:pl-3 rtl:pr-3 text-brand-muted">
-                {dealPricing.basePrice}
+              <del className="text-sm md:text-base xl:text-lg text-opacity-50 text-brand-muted">
+                {productPricing.basePrice}
               </del>
-              {typeof dealPricing.discountPercent === "number" && (
-                <span className="inline-block rounded font-medium text-xs md:text-sm bg-brand-sale text-brand-light uppercase px-2 py-1 ltr:ml-2.5 rtl:mr-2.5">
-                  {dealPricing.discountPercent}% off
+              {typeof productPricing.discountPercent === "number" && (
+                <span className="inline-block rounded font-medium text-xs md:text-sm bg-brand-sale text-brand-light uppercase px-2 py-1">
+                  {productPricing.discountPercent}% off
                 </span>
               )}
             </>
