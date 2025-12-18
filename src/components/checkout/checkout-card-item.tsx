@@ -1,44 +1,38 @@
 "use client";
 import { Item } from "@/services/utils/cartUtils";
 import Image from "@/components/shared/image";
-import usePrice from "@/services/product/use-price";
 import React from "react";
 import { productPlaceholder } from "@/assets/placeholders";
+import { useProductPricing } from "@/utils/pricing";
+import usePrice from "@/services/product/use-price";
 
 export const CheckoutItem: React.FC<{ item: Item }> = ({ item }) => {
   const quantity = item.quantity ?? 1;
 
-  // Check if dealPrice exists and is valid (not null, > 0, and < originalPrice)
-  const hasBackendDeal =
-    typeof item.originalPrice === "number" &&
-    item.originalPrice > 0 &&
-    typeof item.dealPrice === "number" &&
-    item.dealPrice !== null &&
-    item.dealPrice > 0 &&
-    item.dealPrice < item.originalPrice;
-
-  // Use dealPrice if valid, otherwise use originalPrice
-  const effectiveUnit = hasBackendDeal && typeof item.dealPrice === "number"
-    ? item.dealPrice
-    : (typeof item.originalPrice === "number" && item.originalPrice > 0
-        ? item.originalPrice
-        : item.price);
-
-  // For display: unit price with strike-through if deal exists
-  const unitAmount = hasBackendDeal
-    ? item.dealPrice!
-    : (typeof item.originalPrice === "number" && item.originalPrice > 0
-        ? item.originalPrice
-        : item.price);
-
-  const baseAmount = hasBackendDeal
-    ? item.originalPrice!
-    : undefined;
-
-  const { price: unitPrice, basePrice } = usePrice({
-    amount: unitAmount,
-    baseAmount,
+  // Extract sale_price from item if available
+  const sale_price = item.sale_price ?? null;
+  
+  // For sales: if originalPrice is not provided but sale_price exists and is less than price,
+  // then price is the original and sale_price is the sale price
+  // For deals: originalPrice and dealPrice are provided by backend
+  const effectiveOriginalPrice = item.originalPrice ?? 
+    (sale_price && sale_price < item.price ? item.price : null);
+  const effectiveSalePrice = sale_price && sale_price < item.price ? sale_price : null;
+  
+  // Use comprehensive pricing logic that handles both deals and sales
+  const productPricing = useProductPricing({
+    originalPrice: effectiveOriginalPrice,
+    dealPrice: item.dealPrice ?? null,
+    price: item.price ?? null,
+    sale_price: effectiveSalePrice,
   });
+
+  // Use the formatted prices directly from useProductPricing
+  const unitPrice = productPricing.price;
+  const basePrice = productPricing.basePrice;
+
+  // Calculate effective unit price for line total
+  const effectiveUnit = productPricing.effectivePrice;
 
   const { price: lineTotal } = usePrice({
     amount: item.itemTotal ?? effectiveUnit * quantity,

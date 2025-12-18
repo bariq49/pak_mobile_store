@@ -90,7 +90,7 @@ const CustomCardForm: React.FC<CustomCardFormProps> = ({
           }
         }
 
-        toast.success("Payment successful!");
+        toast.success("✓ Payment successful! It may take 5 to 10 minutes to receive the confirmation email.");
         router.push(ROUTES.ORDER_CONFIRMATION(order._id));
       }
     } catch (err: any) {

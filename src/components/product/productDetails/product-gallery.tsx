@@ -5,6 +5,7 @@ import { Product } from "@/services/types";
 import cn from "classnames";
 import { productPlaceholder } from "@/assets/placeholders";
 import { findMatchingVariant } from "@/services/utils/convert-variants-to-variations";
+import { useCart } from "@/hooks/use-cart";
 
 interface GalleryProps {
   className?: string;
@@ -20,6 +21,12 @@ const ProductGallery: React.FC<GalleryProps> = ({
   className,
   attributes,
 }) => {
+  const { useCartHelpers } = useCart();
+  const { outOfStock } = useCartHelpers();
+  
+  // Check if product is out of stock
+  const isOutOfStock = data ? (outOfStock(data.id) || (data.quantity ?? 0) < 1) : false;
+  
   // Find matching variant if attributes are selected
   const matchingVariant = useMemo(() => {
     if (!data?.variants || !attributes || Object.keys(attributes).length === 0) {
@@ -107,23 +114,35 @@ const ProductGallery: React.FC<GalleryProps> = ({
   }, [variantImage, data?.image?.original]);
 
   return (
-    <div className={cn("mb-6 md:mb-8 lg:mb-0", className)}>
+    <div className={cn("mb-6 md:mb-8 lg:mb-0 relative", className)}>
       {gallery.length > 0 ? (
-        <ThumbnailCarousel
-          gallery={gallery}
-          thumbnailClassName="xl:w-full"
-          galleryClassName="xl:w-[100px]"
-          variant={variant}
-          activeIndex={activeIndex}
-        />
+        <div className="relative">
+          <ThumbnailCarousel
+            gallery={gallery}
+            thumbnailClassName="xl:w-full"
+            galleryClassName="xl:w-[100px]"
+            variant={variant}
+            activeIndex={activeIndex}
+          />
+          {isOutOfStock && (
+            <span className="absolute top-3 left-3 z-10 text-[11px] md:text-xs font-medium text-brand-light uppercase inline-block bg-brand-dark dark:bg-white rounded-sm px-2.5 pt-1 pb-[3px]">
+              Out of Stock
+            </span>
+          )}
+        </div>
       ) : (
-        <div className="flex items-center justify-center w-auto">
+        <div className="relative flex items-center justify-center w-auto">
           <Image
             src={displayImage}
             alt={data?.name ?? "product name"}
             width={500}
             height={500}
           />
+          {isOutOfStock && (
+            <span className="absolute top-3 left-3 z-10 text-[11px] md:text-xs font-medium text-brand-light uppercase inline-block bg-brand-dark dark:bg-white rounded-sm px-2.5 pt-1 pb-[3px]">
+              Out of Stock
+            </span>
+          )}
         </div>
       )}
     </div>

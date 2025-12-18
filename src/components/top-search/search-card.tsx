@@ -7,17 +7,24 @@ import { usePanel } from "@/hooks/use-panel";
 import { colorMap } from "@/data/color-settings";
 import cn from "classnames";
 import StarIcon from "@/components/icons/star-icon";
+import { useProductPricing } from "@/utils/pricing";
 
 type SearchProductProps = {
   product: any;
 };
 
 const SearchCard: React.FC<SearchProductProps> = ({ product }) => {
-  const { name, image, product_type, variants } = product ?? {};
-  const { price, basePrice } = usePrice({
-    amount: product?.sale_price ? product?.sale_price : product?.price,
-    baseAmount: product?.price,
+  const { name, image, product_type, variants, originalPrice, dealPrice, sale_price, price: productPrice } = product ?? {};
+  
+  const productPricing = useProductPricing({
+    originalPrice: originalPrice ?? null,
+    dealPrice: dealPrice ?? null,
+    price: productPrice ?? null,
+    sale_price: sale_price ?? null,
   });
+  
+  const price = productPricing.price;
+  const basePrice = productPricing.basePrice;
 
   // Calculate min/max prices from variants if not present or zero
   let calculatedMinPrice = product?.min_price;
@@ -38,8 +45,8 @@ const SearchCard: React.FC<SearchProductProps> = ({ product }) => {
 
   // Fallback to product price if still no valid prices
   if ((!calculatedMinPrice || calculatedMinPrice === 0) && (!calculatedMaxPrice || calculatedMaxPrice === 0)) {
-    calculatedMinPrice = product?.price;
-    calculatedMaxPrice = product?.price;
+    calculatedMinPrice = productPrice ?? product?.price;
+    calculatedMaxPrice = productPrice ?? product?.price;
   }
 
   const { price: minPrice } = usePrice({
@@ -99,7 +106,7 @@ const SearchCard: React.FC<SearchProductProps> = ({ product }) => {
           </div>
         )}
 
-        <div className="space-x-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           <span
             className={cn(
               "inline-block font-semibold text-sm sm:text-15px lg:text-base",
@@ -109,7 +116,7 @@ const SearchCard: React.FC<SearchProductProps> = ({ product }) => {
             {product_type === "variable" ? `${minPrice} - ${maxPrice}` : price}
           </span>
           {basePrice && (
-            <del className="text-sm text-brand-dark text-opacity-70">
+            <del className="text-xs sm:text-sm text-brand-dark text-opacity-70">
               {basePrice}
             </del>
           )}
